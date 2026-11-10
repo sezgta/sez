@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1200" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="tide-bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#021015"/>
+      <stop offset=".38" stop-color="#042e33"/>
+      <stop offset=".74" stop-color="#06202e"/>
+      <stop offset="1" stop-color="#03080d"/>
+    </linearGradient>
+    <linearGradient id="tide-mint" x1="80" y1="900" x2="1480" y2="320" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#12ac9f" stop-opacity=".18"/>
+      <stop offset=".3" stop-color="#34f5cd"/>
+      <stop offset=".68" stop-color="#2be5dc"/>
+      <stop offset="1" stop-color="#bafff4" stop-opacity=".14"/>
+    </linearGradient>
+    <linearGradient id="tide-blue" x1="-80" y1="230" x2="1500" y2="820" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#3b87ff" stop-opacity=".1"/>
+      <stop offset=".4" stop-color="#195dda"/>
+      <stop offset=".8" stop-color="#54d9ff" stop-opacity=".72"/>
+      <stop offset="1" stop-color="#dcfff9" stop-opacity=".06"/>
+    </linearGradient>
+    <linearGradient id="tide-deep" x1="450" y1="1330" x2="1580" y2="500" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0a0d1e" stop-opacity=".1"/>
+      <stop offset=".34" stop-color="#142c77" stop-opacity=".8"/>
+      <stop offset=".72" stop-color="#4b3fe4" stop-opacity=".4"/>
+      <stop offset="1" stop-color="#871eff" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="tide-foam" x1="280" y1="800" x2="1440" y2="380" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#e5fff9" stop-opacity="0"/>
+      <stop offset=".3" stop-color="#eafffa" stop-opacity=".62"/>
+      <stop offset=".66" stop-color="#b7fff0" stop-opacity=".3"/>
+      <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+    </linearGradient>
+    <radialGradient id="tide-glow" cx=".66" cy=".28" r=".43">
+      <stop offset="0" stop-color="#c5fff6" stop-opacity=".5"/>
+      <stop offset=".34" stop-color="#51f4dd" stop-opacity=".15"/>
+      <stop offset=".72" stop-color="#1170bf" stop-opacity=".08"/>
+      <stop offset="1" stop-color="#021015" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="tide-vignette" cx=".5" cy=".46" r=".78">
+      <stop offset=".48" stop-color="#010609" stop-opacity="0"/>
+      <stop offset=".8" stop-color="#010609" stop-opacity=".28"/>
+      <stop offset="1" stop-color="#010609" stop-opacity=".8"/>
+    </radialGradient>
+    <filter id="tide-blur-huge" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="112"/>
+    </filter>
+    <filter id="tide-blur-soft" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="52"/>
+    </filter>
+    <filter id="tide-blur-tight" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="12"/>
+    </filter>
+    <filter id="tide-grain" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency=".75" numOctaves="3" seed="63" stitchTiles="stitch"/>
+      <feColorMatrix type="saturate" values="0"/>
+      <feComponentTransfer><feFuncA type="table" tableValues="0 .28"/></feComponentTransfer>
+    </filter>
+  </defs>
+
+  <rect width="1600" height="1200" fill="url(#tide-bg)"/>
+  <rect width="1600" height="1200" fill="url(#tide-glow)"/>
+
+  <g filter="url(#tide-blur-huge)">
+    <path d="M-280 940 C 120 700, 380 1120, 720 780 S 1310 260, 1820 430" fill="none" stroke="url(#tide-mint)" stroke-width="430" stroke-linecap="round" opacity=".8"/>
+    <path d="M-280 380 C 160 80, 460 480, 840 270 S 1390 130, 1810 280" fill="none" stroke="url(#tide-blue)" stroke-width="360" stroke-linecap="round" opacity=".74"/>
+    <path d="M600 1380 C 780 1080, 1000 1170, 1210 860 S 1510 610, 1840 700" fill="none" stroke="url(#tide-deep)" stroke-width="370" stroke-linecap="round" opacity=".7"/>
+    <ellipse cx="300" cy="1040" rx="380" ry="300" fill="#053a4d" opacity=".7"/>
+    <ellipse cx="1380" cy="220" rx="330" ry="260" fill="#47baff" opacity=".15"/>
+  </g>
+
+  <g filter="url(#tide-blur-soft)">
+    <path d="M-40 840 C 280 680, 500 900, 780 700 S 1230 400, 1620 470" fill="none" stroke="#9dfff0" stroke-width="56" stroke-linecap="round" opacity=".25"/>
+    <path d="M260 1160 C 570 940, 780 1020, 1000 800 S 1400 610, 1660 660" fill="none" stroke="#d5fff8" stroke-width="34" stroke-linecap="round" opacity=".16"/>
+    <ellipse cx="1110" cy="330" rx="220" ry="150" fill="#d8fff8" opacity=".2"/>
+    <ellipse cx="780" cy="720" rx="260" ry="165" fill="#0a5cff" opacity=".18"/>
+  </g>
+
+  <g filter="url(#tide-blur-tight)">
+    <path d="M40 824 C 330 688, 538 858, 790 686 S 1210 430, 1590 473" fill="none" stroke="url(#tide-foam)" stroke-width="12" stroke-linecap="round" opacity=".9"/>
+    <path d="M132 883 C 364 780, 576 904, 804 770" fill="none" stroke="#f1fffd" stroke-width="4" stroke-linecap="round" opacity=".35"/>
+    <path d="M1010 385 C 1190 296, 1360 340, 1560 242" fill="none" stroke="#e6ddff" stroke-width="5" stroke-linecap="round" opacity=".3"/>
+    <ellipse cx="1172" cy="296" rx="46" ry="32" fill="#f2fffc" opacity=".4"/>
+  </g>
+
+  <g fill="none" stroke="#cafff7" stroke-linecap="round" opacity=".32">
+    <path d="M-20 980 C 300 810, 570 910, 802 744" stroke-width="1.2" opacity=".32"/>
+    <path d="M300 1150 C 560 986, 770 1060, 1024 876" stroke-width="1" opacity=".2"/>
+    <path d="M1130 411 C 1290 333, 1438 365, 1620 280" stroke-width="1" opacity=".25"/>
+  </g>
+
+  <rect width="1600" height="1200" filter="url(#tide-grain)" opacity=".42"/>
+  <rect width="1600" height="1200" fill="url(#tide-vignette)"/>
+</svg>
