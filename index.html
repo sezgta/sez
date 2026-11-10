@@ -1,0 +1,1034 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#05070b">
+  <meta name="description" content="SEZ 液态桌面：一次关于液态玻璃与触感界面的独立研究。点击唤醒，进入一块可以亲手操作的玻璃手机桌面。">
+  <title>SEZ — 让网站，学会流动</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+  <script>document.documentElement.classList.add('js');</script>
+</head>
+<body id="top">
+  <div class="scroll-progress" aria-hidden="true"><span id="scrollProgress"></span></div>
+
+  <svg class="svg-sprite" aria-hidden="true" width="0" height="0">
+    <symbol id="i-spark" viewBox="0 0 24 24">
+      <path d="M12 2.5c.4 5.6 4.1 9.3 9.5 9.5-5.4.4-9.1 4.1-9.5 9.5-.4-5.4-4.1-9.1-9.5-9.5C7.9 11.8 11.6 8.1 12 2.5Z" fill="currentColor"/>
+    </symbol>
+    <symbol id="i-copy" viewBox="0 0 24 24">
+      <rect x="9" y="9" width="11" height="11" rx="2" fill="none" stroke="currentColor" stroke-width="1.6"/>
+      <path d="M15 5.5A1.5 1.5 0 0 0 13.5 4h-8A1.5 1.5 0 0 0 4 5.5v8A1.5 1.5 0 0 0 5.5 15" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="i-check" viewBox="0 0 24 24">
+      <path d="m5 12.5 4.3 4L19 7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.5"/>
+      <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="i-flashlight" viewBox="0 0 24 24">
+      <path d="M9 6h6v3l-1.5 2v8h-3v-8L9 9V6Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+      <path d="M10 6V4.5h4V6M10.5 10.5h3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="i-camera" viewBox="0 0 24 24">
+      <path d="M4 8.5A1.5 1.5 0 0 1 5.5 7h2l1.2-1.5h6.6L16.5 7h2A1.5 1.5 0 0 1 20 8.5v9a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 17.5v-9Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+      <circle cx="12" cy="13" r="3.4" fill="none" stroke="currentColor" stroke-width="1.5"/>
+    </symbol>
+    <symbol id="i-wave" viewBox="0 0 24 24">
+      <path d="M3 13c2.2-4.7 4.3-4.7 6.5 0s4.3 4.7 6.5 0 3.7-4.2 5 0" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M3 18c2.2-2.7 4.3-2.7 6.5 0s4.3 2.7 6.5 0" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity=".45"/>
+    </symbol>
+    <symbol id="i-grid" viewBox="0 0 24 24">
+      <rect x="4" y="4" width="6" height="6" rx="1.6" fill="none" stroke="currentColor" stroke-width="1.5"/>
+      <rect x="14" y="4" width="6" height="6" rx="1.6" fill="none" stroke="currentColor" stroke-width="1.5"/>
+      <rect x="4" y="14" width="6" height="6" rx="1.6" fill="none" stroke="currentColor" stroke-width="1.5"/>
+      <rect x="14" y="14" width="6" height="6" rx="1.6" fill="none" stroke="currentColor" stroke-width="1.5"/>
+    </symbol>
+    <symbol id="i-chevron-down" viewBox="0 0 24 24">
+      <path d="m6 9 6 6 6-6" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="i-reset" viewBox="0 0 24 24">
+      <path d="M5 8.5A7.5 7.5 0 1 1 4.5 15" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+      <path d="M4.5 4v5h5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <filter id="glass-warp" x="-20%" y="-20%" width="140%" height="140%" color-interpolation-filters="sRGB">
+      <feTurbulence type="fractalNoise" baseFrequency="0.007 0.012" numOctaves="2" seed="9" result="noise"/>
+      <feGaussianBlur in="noise" stdDeviation="3" result="softNoise"/>
+      <feDisplacementMap in="SourceGraphic" in2="softNoise" scale="10" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <filter id="lens-warp" x="-30%" y="-30%" width="160%" height="160%" color-interpolation-filters="sRGB">
+      <feTurbulence type="fractalNoise" baseFrequency="0.018 0.027" numOctaves="2" seed="4" result="noise"/>
+      <feGaussianBlur in="noise" stdDeviation="2" result="softNoise"/>
+      <feDisplacementMap in="SourceGraphic" in2="softNoise" scale="26" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+  </svg>
+
+  <div class="ambient ambient--one" aria-hidden="true"></div>
+  <div class="ambient ambient--two" aria-hidden="true"></div>
+  <div class="pointer-light" id="pointerLight" aria-hidden="true"></div>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="wake-veil" id="wakeVeil" aria-hidden="true"><span></span><span></span></div>
+
+  <header class="site-header" id="siteHeader">
+    <div class="nav-shell">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true"><i></i><i></i></span>
+        <span class="brand-name">SEZ</span>
+        <span class="brand-sub">/ LIQUID DESKTOP</span>
+      </div>
+
+      <p class="header-note">
+        <span>SEZ LIQUID OS</span>
+        <i aria-hidden="true"></i>
+        <span>AN INTERFACE STUDY</span>
+        <em>2026</em>
+      </p>
+
+      <div class="header-actions">
+        <button class="wake-button" type="button" data-wake data-open-desktop>
+          <span class="wake-button-icon" aria-hidden="true"><svg width="14" height="14"><use href="#i-spark"></use></svg></span>
+          <span>唤醒 SEZ</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero" aria-labelledby="heroTitle">
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <div class="eyebrow hero-enter" style="--d:.05s">
+            <span class="eyebrow-dot" aria-hidden="true"></span>
+            <span>SEZ / LIQUID DESKTOP</span>
+            <span class="eyebrow-divider" aria-hidden="true"></span>
+            <span class="eyebrow-muted">WAKE 01</span>
+          </div>
+
+          <h1 class="hero-title" id="heroTitle" aria-label="让网站，学会流动。">
+            <span class="title-line"><span>让网站，</span></span>
+            <span class="title-line"><span>学会<span class="title-glow">流动</span><i class="title-orb" aria-hidden="true"></i></span></span>
+          </h1>
+
+          <p class="hero-lead hero-enter" style="--d:.22s">
+            光有了厚度，边缘学会折射。轻触唤醒，进入一块可以亲手操作的液态玻璃桌面。
+          </p>
+
+          <div class="hero-actions hero-enter" style="--d:.32s">
+            <button class="button button--primary liquid-button" type="button" data-wake data-open-desktop id="heroWake">
+              <span>唤醒 SEZ 桌面</span>
+              <span class="button-icon" aria-hidden="true">
+                <svg width="17" height="17"><use href="#i-spark"></use></svg>
+              </span>
+            </button>
+            <span class="hero-scroll-cue" aria-hidden="true">
+              <span class="cue-rule"><i></i></span>
+              向下，进入光的内部
+              <svg width="13" height="13"><use href="#i-chevron-down"></use></svg>
+            </span>
+          </div>
+
+          <div class="hero-meta hero-enter" style="--d:.4s">
+            <span>REFRACTION</span>
+            <span class="meta-dot" aria-hidden="true"></span>
+            <span>SPECULAR</span>
+            <span class="meta-dot" aria-hidden="true"></span>
+            <span>TOUCH</span>
+            <span class="hero-meta-note">made to be felt.</span>
+          </div>
+        </div>
+
+        <div class="hero-visual hero-enter" style="--d:.18s">
+          <div class="stage-frame" id="heroStage">
+            <img class="stage-backdrop" src="assets/scene-aurora.svg" alt="" aria-hidden="true">
+            <div class="stage-veil" aria-hidden="true"></div>
+            <div class="liquid-flow liquid-flow--hero" aria-hidden="true"><i></i><i></i><i></i></div>
+
+            <div class="stage-topline" aria-hidden="true">
+              <span>LIQUID / 01</span>
+              <span class="stage-topline-right">MOVE TO REFRACT</span>
+            </div>
+
+            <div class="phone" aria-hidden="true">
+              <div class="phone-body">
+                <div class="phone-screen">
+                  <img class="phone-wallpaper" src="assets/scene-tide.svg" alt="">
+                  <div class="phone-shade"></div>
+                  <span class="phone-island"></span>
+
+                  <div class="phone-status">
+                    <span data-clock>21:04</span>
+                    <span class="phone-status-icons">
+                      <svg viewBox="0 0 18 12" width="16" height="11"><path d="M1 9h2v2H1V9Zm4-3h2v5H5V6Zm4-3h2v8H9V3Zm4-3h2v11h-2V0Z" fill="currentColor"/></svg>
+                      <svg viewBox="0 0 16 12" width="15" height="11"><path d="M8 9.8 6.4 8.2a2.3 2.3 0 0 1 3.2 0L8 9.8ZM8 6.2c-1.2 0-2.3.5-3.1 1.3L3.7 6.3A6.2 6.2 0 0 1 8 4.7c1.6 0 3.2.6 4.3 1.6l-1.2 1.2A4.4 4.4 0 0 0 8 6.2ZM8 2.6c-2.2 0-4.2.9-5.7 2.4L1.1 3.8A9.7 9.7 0 0 1 8 1.1c2.6 0 5 1 6.9 2.7l-1.2 1.2A8 8 0 0 0 8 2.6Z" fill="currentColor"/></svg>
+                      <svg viewBox="0 0 26 12" width="23" height="11"><rect x=".5" y=".5" width="21" height="11" rx="3.5" fill="none" stroke="currentColor" opacity=".5"/><rect x="2.5" y="2.5" width="16" height="7" rx="1.8" fill="currentColor"/><path d="M23 4v4c1.2-.5 1.6-1 1.6-2S24.2 4.5 23 4Z" fill="currentColor" opacity=".5"/></svg>
+                    </span>
+                  </div>
+
+                  <div class="phone-lock">
+                    <p class="phone-date"><span data-date>11月11日 · 星期二</span></p>
+                    <p class="phone-time" data-clock>21:04</p>
+                    <p class="phone-weather">
+                      <svg width="13" height="13" aria-hidden="true"><use href="#i-sun"></use></svg>
+                      上海 · 18° 晴
+                    </p>
+                  </div>
+
+                  <div class="phone-notification glass-surface">
+                    <span class="notif-mark" aria-hidden="true"><svg width="14" height="14"><use href="#i-spark"></use></svg></span>
+                    <div class="notif-copy">
+                      <strong>SEZ</strong>
+                      <span>轻触唤醒桌面。</span>
+                    </div>
+                    <span class="notif-time">现在</span>
+                  </div>
+
+                  <div class="phone-bottom">
+                    <div class="phone-quick">
+                      <span class="quick-btn"><svg width="16" height="16"><use href="#i-flashlight"></use></svg></span>
+                      <span class="quick-btn"><svg width="17" height="17"><use href="#i-camera"></use></svg></span>
+                    </div>
+                    <div class="phone-dock glass-surface">
+                      <span class="dock-icon"><svg width="19" height="19"><use href="#i-spark"></use></svg></span>
+                      <span class="dock-icon"><svg width="21" height="21"><use href="#i-wave"></use></svg></span>
+                      <span class="dock-icon dock-icon--active"><svg width="19" height="19"><use href="#i-grid"></use></svg></span>
+                      <span class="dock-icon"><svg width="19" height="19"><use href="#i-sun"></use></svg></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <aside class="stage-spec glass-surface" aria-hidden="true">
+              <div class="spec-head"><span>LIGHT NOTE</span><span>01</span></div>
+              <p class="spec-quote">Liquid<br><em>is a feeling.</em></p>
+              <div class="spec-rule"></div>
+              <div class="spec-foot"><span class="live-dot"></span> 光，正在经过</div>
+            </aside>
+
+            <div class="stage-lens" id="stageLens" aria-hidden="true">
+              <span class="lens-spark"></span>
+              <span class="lens-caustic"></span>
+            </div>
+            <span class="lens-trail lens-trail--one" id="lensTrailOne" aria-hidden="true"></span>
+            <span class="lens-trail lens-trail--two" id="lensTrailTwo" aria-hidden="true"></span>
+
+            <div class="stage-coord" aria-hidden="true">REFRACTION / 1.52<br>DISPERSION / 0.08</div>
+            <button class="stage-hint glass-surface" type="button" data-wake data-open-desktop aria-label="唤醒 SEZ 液态桌面">
+              <span class="live-dot"></span>
+              唤醒 SEZ 桌面
+              <svg width="12" height="12" aria-hidden="true"><use href="#i-spark"></use></svg>
+            </button>
+          </div>
+
+          <div class="stage-caption">
+            <span class="caption-left"><span class="caption-line" aria-hidden="true"></span> 实时材质 · 会回应光标</span>
+            <span class="caption-right">LIQUID / 02</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-scroll" aria-hidden="true">
+        <span>SCROLL / 01</span>
+        <span class="scroll-track"><i></i></span>
+      </div>
+    </section>
+
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee-track">
+        <div class="marquee-group">
+          <span>LIQUID GLASS</span><i>✦</i><span>REFRACTION</span><i>✦</i><span>SPECULAR</span><i>✦</i><span>TOUCH</span><i>✦</i><span>DISPERSION</span><i>✦</i><span>STILLNESS</span><i>✦</i><span>MOTION</span><i>✦</i>
+        </div>
+        <div class="marquee-group">
+          <span>LIQUID GLASS</span><i>✦</i><span>REFRACTION</span><i>✦</i><span>SPECULAR</span><i>✦</i><span>TOUCH</span><i>✦</i><span>DISPERSION</span><i>✦</i><span>STILLNESS</span><i>✦</i><span>MOTION</span><i>✦</i>
+        </div>
+      </div>
+    </div>
+
+    <section class="question" id="question" aria-labelledby="questionTitle">
+      <div class="section-shell">
+        <div class="section-label reveal"><span>01</span> THE QUESTION</div>
+
+        <div class="question-grid">
+          <h2 class="question-title reveal" id="questionTitle">
+            你也想让网站，<br>
+            拥有这样的<br>
+            <span class="accent-text">液态玻璃</span>吗？
+          </h2>
+
+          <aside class="question-aside reveal" style="--delay:.1s">
+            <p>不是把背景变模糊。是让光有了路径，让界面有了厚度，让一次点击，留下余温。</p>
+            <p class="serif-note">It is not glass.<br>It is a way of seeing.</p>
+            <span class="aside-index">ASK / 01</span>
+          </aside>
+        </div>
+
+        <div class="principles reveal" style="--delay:.12s">
+          <article class="principle">
+            <span class="principle-index">01</span>
+            <div>
+              <h3>折射</h3>
+              <p>背景不是被遮住，而是被重新弯折。</p>
+            </div>
+          </article>
+          <article class="principle">
+            <span class="principle-index">02</span>
+            <div>
+              <h3>高光</h3>
+              <p>光不贴在表面，它跟着你走。</p>
+            </div>
+          </article>
+          <article class="principle">
+            <span class="principle-index">03</span>
+            <div>
+              <h3>触感</h3>
+              <p>每一次按下，都有重量和回声。</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="lab" id="lab" aria-labelledby="labTitle">
+      <div class="section-shell">
+        <div class="section-heading">
+          <div class="section-label reveal"><span>02</span> THE MATERIAL</div>
+          <div class="heading-row">
+            <h2 class="reveal" id="labTitle">一块玻璃，<br><span class="muted-heading">一百种光。</span></h2>
+            <p class="section-intro reveal" style="--delay:.1s">切换场景，拖动参数。你调的不是滤镜，是光线穿过玻璃时的速度、方向，与温度。</p>
+          </div>
+        </div>
+
+        <div class="lab-grid">
+          <div class="lab-controls reveal" aria-label="玻璃材质参数">
+            <div class="control-group">
+              <div class="control-heading">
+                <span class="control-label">光线场景</span>
+                <span class="control-meta" id="sceneMeta">AURORA / 01</span>
+              </div>
+              <div class="scene-switch" role="group" aria-label="选择光线场景">
+                <button class="scene-option is-active" type="button" data-scene="aurora" aria-pressed="true"><i class="scene-swatch scene-swatch--aurora"></i>极光</button>
+                <button class="scene-option" type="button" data-scene="dusk" aria-pressed="false"><i class="scene-swatch scene-swatch--dusk"></i>落日</button>
+                <button class="scene-option" type="button" data-scene="tide" aria-pressed="false"><i class="scene-swatch scene-swatch--tide"></i>潮汐</button>
+              </div>
+            </div>
+
+            <div class="control-group">
+              <div class="control-heading">
+                <span class="control-label">材质性格</span>
+                <button class="reset-button" id="resetMaterial" type="button">
+                  <svg width="13" height="13" aria-hidden="true"><use href="#i-reset"></use></svg>
+                  还原
+                </button>
+              </div>
+              <div class="preset-switch" role="group" aria-label="选择材质性格">
+                <button class="preset-option is-active" type="button" data-preset="soft" aria-pressed="true">晨雾</button>
+                <button class="preset-option" type="button" data-preset="crystal" aria-pressed="false">晶透</button>
+                <button class="preset-option" type="button" data-preset="deep" aria-pressed="false">深夜</button>
+              </div>
+            </div>
+
+            <div class="parameter-stack">
+              <div class="parameter">
+                <div class="parameter-head">
+                  <label for="blurRange">雾度 <span>BLUR</span></label>
+                  <output id="blurOutput" for="blurRange">18 px</output>
+                </div>
+                <input class="range" id="blurRange" type="range" min="0" max="32" step="1" value="18" data-param="blur">
+                <div class="parameter-scale"><span>清澈</span><span>朦胧</span></div>
+              </div>
+
+              <div class="parameter">
+                <div class="parameter-head">
+                  <label for="refractionRange">折射 <span>REFRACTION</span></label>
+                  <output id="refractionOutput" for="refractionRange">64</output>
+                </div>
+                <input class="range" id="refractionRange" type="range" min="0" max="100" step="1" value="64" data-param="refraction">
+                <div class="parameter-scale"><span>平直</span><span>弯折</span></div>
+              </div>
+
+              <div class="parameter">
+                <div class="parameter-head">
+                  <label for="dispersionRange">色散 <span>DISPERSION</span></label>
+                  <output id="dispersionOutput" for="dispersionRange">24</output>
+                </div>
+                <input class="range" id="dispersionRange" type="range" min="0" max="100" step="1" value="24" data-param="dispersion">
+                <div class="parameter-scale"><span>纯粹</span><span>彩虹</span></div>
+              </div>
+            </div>
+
+            <p class="control-footnote"><span class="footnote-mark" aria-hidden="true"></span>所有画面都在你的浏览器里实时生成，没有数据离开此页。</p>
+          </div>
+
+          <div class="lab-preview reveal" style="--delay:.08s">
+            <div class="lab-stage" id="labStage" data-scene="aurora">
+              <img class="scene-layer is-active" data-scene-layer="aurora" src="assets/scene-aurora.svg" alt="" aria-hidden="true">
+              <img class="scene-layer" data-scene-layer="dusk" src="assets/scene-dusk.svg" alt="" aria-hidden="true">
+              <img class="scene-layer" data-scene-layer="tide" src="assets/scene-tide.svg" alt="" aria-hidden="true">
+              <div class="lab-veil" aria-hidden="true"></div>
+              <div class="liquid-flow liquid-flow--lab" aria-hidden="true"><i></i><i></i><i></i></div>
+              <div class="lab-grain" aria-hidden="true"></div>
+
+              <div class="lab-stage-top">
+                <span class="stage-chip glass-surface"><span class="live-dot"></span> LIQUID STUDY</span>
+                <span class="stage-chip glass-surface">LIVE <i class="live-bars" aria-hidden="true"><b></b><b></b><b></b></i></span>
+              </div>
+
+              <div class="studio-card glass-surface" id="studioCard">
+                <span class="card-sheen" aria-hidden="true"></span>
+                <div class="studio-head">
+                  <div class="studio-brand">
+                    <span class="studio-mark" aria-hidden="true"></span>
+                    <div><strong>Liquid Study</strong><small>MATERIAL / 02</small></div>
+                  </div>
+                  <span class="studio-badge">LIVE</span>
+                </div>
+
+                <div class="studio-weather">
+                  <div>
+                    <p class="studio-time" data-clock>21:04</p>
+                    <p class="studio-date"><span data-date>11月11日 · 星期二</span> · 上海</p>
+                  </div>
+                  <div class="weather-readout">
+                    <svg width="22" height="22" aria-hidden="true"><use href="#i-sun"></use></svg>
+                    <span>18°</span>
+                    <small>晴</small>
+                  </div>
+                </div>
+
+                <div class="studio-readout" aria-label="当前材质参数">
+                  <div><span>BLUR</span><strong id="readoutBlur">18 px</strong></div>
+                  <div><span>REFRACTION</span><strong id="readoutRefraction">64</strong></div>
+                  <div><span>DISPERSION</span><strong id="readoutDispersion">24</strong></div>
+                </div>
+
+                <div class="studio-control">
+                  <div class="studio-control-copy">
+                    <strong>实时高光</strong>
+                    <small>让玻璃记住光标的位置</small>
+                  </div>
+                  <button class="switch switch--small" id="highlightSwitch" type="button" role="switch" aria-checked="true" aria-label="实时高光">
+                    <span class="switch-thumb"></span>
+                  </button>
+                </div>
+
+                <button class="studio-save" id="copyMaterial" type="button">
+                  <span>取走这组材质</span>
+                  <svg width="15" height="15" aria-hidden="true"><use href="#i-copy"></use></svg>
+                </button>
+              </div>
+
+              <div class="lab-stage-bottom" aria-hidden="true">
+                <span>MOVE · TILT · REFRACT</span>
+                <span class="lab-scene-name" id="labSceneName">AURORA / 01</span>
+              </div>
+
+              <div class="lab-toast" id="labToast" role="status" aria-live="polite"></div>
+            </div>
+            <p class="preview-note"><span class="live-dot"></span> 光会跟着你走 · 这块玻璃是活的</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="components" id="components" aria-labelledby="componentsTitle">
+      <div class="section-shell">
+        <div class="section-heading section-heading--split">
+          <div>
+            <div class="section-label reveal"><span>03</span> TOUCH</div>
+            <h2 class="reveal" id="componentsTitle">每一次触碰，<br><span class="muted-heading">都该有回声。</span></h2>
+          </div>
+          <p class="section-intro reveal" style="--delay:.1s">按钮会呼吸，开关有阻尼，滑杆像水面，标签栏会滑向你的选择。界面的温度，藏在这些不被注意的瞬间里。</p>
+        </div>
+
+        <div class="components-grid">
+          <article class="component-card component-card--wide reveal">
+            <div class="specimen specimen--button">
+              <img src="assets/scene-aurora.svg" alt="" aria-hidden="true">
+              <div class="specimen-shade" aria-hidden="true"></div>
+              <div class="specimen-label"><span>01</span> LIQUID BUTTON</div>
+              <button class="demo-button liquid-button" id="demoButton" type="button">
+                <span>触碰我</span>
+                <span class="button-icon" aria-hidden="true"><svg width="17" height="17"><use href="#i-spark"></use></svg></span>
+              </button>
+              <p class="specimen-hint">靠近，再按下去</p>
+            </div>
+            <div class="card-info">
+              <div class="card-title"><h3>LiquidButton</h3><span class="tag">MAGNETIC</span></div>
+              <p>靠近时，它会向你倾一点。按下的瞬间，玻璃沿着指针的方向延展，像水面接住一滴光。</p>
+            </div>
+          </article>
+
+          <article class="component-card reveal" style="--delay:.06s">
+            <div class="specimen specimen--toggle">
+              <img src="assets/scene-dusk.svg" alt="" aria-hidden="true">
+              <div class="specimen-shade" aria-hidden="true"></div>
+              <div class="specimen-label"><span>02</span> LIQUID TOGGLE</div>
+              <div class="toggle-demo glass-surface">
+                <div class="toggle-demo-copy">
+                  <strong>空间音场</strong>
+                  <span id="toggleStatus">SPATIAL / OFF</span>
+                </div>
+                <button class="switch js-switch" id="spatialSwitch" type="button" role="switch" aria-checked="false" aria-label="空间音场" data-status="toggleStatus" data-on="SPATIAL / ON" data-off="SPATIAL / OFF">
+                  <span class="switch-thumb"></span>
+                </button>
+              </div>
+              <p class="specimen-hint">按住，看它被拉长</p>
+            </div>
+            <div class="card-info">
+              <div class="card-title"><h3>LiquidToggle</h3><span class="tag">SPRING</span></div>
+              <p>它不是滑过去，而是被拉过去。按住时变长，松手后再轻轻回弹，像一小块被推开的水面。</p>
+            </div>
+          </article>
+
+          <article class="component-card reveal">
+            <div class="specimen specimen--slider">
+              <img src="assets/scene-tide.svg" alt="" aria-hidden="true">
+              <div class="specimen-shade" aria-hidden="true"></div>
+              <div class="specimen-label"><span>03</span> LIQUID SLIDER</div>
+              <div class="slider-demo glass-surface">
+                <div class="slider-demo-head">
+                  <span>光的阻力</span>
+                  <output id="demoSliderOutput" for="demoSlider">64</output>
+                </div>
+                <input class="range" id="demoSlider" type="range" min="0" max="100" step="1" value="64" data-output="demoSliderOutput" aria-label="光的阻力示例">
+                <div class="slider-demo-foot"><span>SOFT</span><span>DAMPED</span></div>
+              </div>
+              <p class="specimen-hint">拖动，感受阻尼</p>
+            </div>
+            <div class="card-info">
+              <div class="card-title"><h3>LiquidSlider</h3><span class="tag">DAMPED</span></div>
+              <p>你摸到的不是圆点，是一小片有重量的水。轨道上的光，会跟着你走到最后。</p>
+            </div>
+          </article>
+
+          <article class="component-card component-card--wide reveal" style="--delay:.06s">
+            <div class="specimen specimen--tabs">
+              <img src="assets/scene-aurora.svg" alt="" aria-hidden="true">
+              <div class="specimen-shade" aria-hidden="true"></div>
+              <div class="specimen-label"><span>04</span> LIQUID TABS</div>
+              <div class="tabs-demo" data-tabs>
+                <div class="glass-tabs" role="tablist" aria-label="材质状态示例">
+                  <span class="tab-pill" aria-hidden="true"></span>
+                  <button class="tab-button" id="tab-light" type="button" role="tab" aria-selected="true" aria-controls="panel-light" tabindex="0" aria-label="光：高光材质">光</button>
+                  <button class="tab-button" id="tab-water" type="button" role="tab" aria-selected="false" aria-controls="panel-water" tabindex="-1" aria-label="水：折射材质">水</button>
+                  <button class="tab-button" id="tab-mist" type="button" role="tab" aria-selected="false" aria-controls="panel-mist" tabindex="-1" aria-label="雾：模糊材质">雾</button>
+                </div>
+                <div class="tab-panels">
+                  <p class="tab-panel" id="panel-light" role="tabpanel" aria-labelledby="tab-light">高光沿着边缘游走，像一束刚刚好的顶光。</p>
+                  <p class="tab-panel" id="panel-water" role="tabpanel" aria-labelledby="tab-water" hidden>背景在玻璃边缘弯折，轮廓开始有了弧度。</p>
+                  <p class="tab-panel" id="panel-mist" role="tabpanel" aria-labelledby="tab-mist" hidden>模糊没有抹掉颜色，它只是让光慢了下来。</p>
+                </div>
+              </div>
+              <p class="specimen-hint">点击，或用方向键切换</p>
+            </div>
+            <div class="card-info">
+              <div class="card-title"><h3>LiquidTabs</h3><span class="tag">FLOW</span></div>
+              <p>选中的那块玻璃会滑过去。不是替换，是连续；不是切换，是流动。</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="closing" id="closing" aria-labelledby="closingTitle">
+      <div class="section-shell">
+        <div class="closing-panel reveal">
+          <img class="closing-backdrop" src="assets/scene-dusk.svg" alt="" aria-hidden="true">
+          <div class="closing-veil" aria-hidden="true"></div>
+          <div class="closing-glow" aria-hidden="true"></div>
+          <div class="liquid-flow closing-flow" aria-hidden="true"><i></i><i></i><i></i></div>
+
+          <div class="closing-copy">
+            <div class="section-label section-label--light"><span>04</span> YOUR TURN</div>
+            <h2 id="closingTitle">下一块玻璃，<br>留给<span class="accent-text">你的网站。</span></h2>
+            <p>如果这一页让你多停留了一秒，那么同一层光，也可能让访客为你的品牌多停留一秒。<br>液态玻璃不是装饰，它是一种让人愿意靠近的方式。</p>
+            <div class="closing-actions">
+              <button class="button button--glass liquid-button" type="button" data-wake data-open-desktop id="closingWake">
+                <span>唤醒 SEZ 桌面</span>
+                <svg width="16" height="16" aria-hidden="true"><use href="#i-spark"></use></svg>
+              </button>
+              <span class="closing-note">无需跳转 · 一切发生在此页</span>
+            </div>
+          </div>
+
+          <div class="closing-seal glass-surface" aria-hidden="true">
+            <i class="seal-orbit"></i>
+            <i class="seal-orbit seal-orbit--two"></i>
+            <span class="seal-kicker">THE NEXT SURFACE</span>
+            <span class="seal-word">Yours.</span>
+            <span class="seal-rule"></span>
+            <span class="seal-foot">LIQUID / 2026</span>
+          </div>
+        </div>
+
+        <div class="closing-meta reveal" style="--delay:.08s">
+          <span><i class="note-dot"></i> NATIVE HTML / CSS / JAVASCRIPT</span>
+          <span>NO EXTERNAL LINKS</span>
+          <span>CONCEPT STUDY / 2026</span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="section-shell footer-inner">
+      <div class="footer-brand">
+        <div class="brand">
+          <span class="brand-mark" aria-hidden="true"><i></i><i></i></span>
+          <span class="brand-name">SEZ</span>
+        </div>
+        <p>把光，留在界面里。</p>
+      </div>
+      <p class="footer-statement">SEZ 液态桌面 · 一块可以被触碰、被打开、被记住的界面。<br>没有跳转，只有一层层光。</p>
+      <p class="footer-legal">SEZ © 2026 · 独立概念体验<br>Inspired by the open-source Backdrop project · Apache-2.0</p>
+    </div>
+    <div class="footer-wordmark" aria-hidden="true">SEZ</div>
+    <p class="footer-end" aria-hidden="true">NO LINKS. ONLY LIGHT.</p>
+  </footer>
+
+  <svg class="svg-sprite" aria-hidden="true" width="0" height="0">
+    <symbol id="si-cloud-sun" viewBox="0 0 24 24">
+      <circle cx="8.5" cy="8.5" r="3.1" fill="none" stroke="currentColor" stroke-width="1.5"/>
+      <path d="M8.5 2.4v1.5M8.5 13.1v1.4M3.4 8.5H1.9M15.1 8.5h-1.5M4.9 4.9 3.8 3.8M13.2 4.9l1.1-1.1M4.9 12.1l-1.1 1.1" fill="none" stroke="currentColor" stroke-width="1.35" stroke-linecap="round"/>
+      <path d="M7.2 19.2h9.1a3.4 3.4 0 0 0 .5-6.8 5.15 5.15 0 0 0-9.7 1.1 3.1 3.1 0 0 0 .1 5.7Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="si-note" viewBox="0 0 24 24">
+      <path d="M6.2 3.2h7.6l4 4v13.6H6.2V3.2Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+      <path d="M13.8 3.2v4.4h4M9 12.2h6M9 16h4.4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="si-photo" viewBox="0 0 24 24">
+      <rect x="3.4" y="4.2" width="17.2" height="15.6" rx="4" fill="none" stroke="currentColor" stroke-width="1.5"/>
+      <circle cx="8.6" cy="9.4" r="1.7" fill="none" stroke="currentColor" stroke-width="1.4"/>
+      <path d="m4.4 17.2 5.1-5.4 3.9 3.9 2.1-2.1 4.2 4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="si-gear" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="3.2" fill="none" stroke="currentColor" stroke-width="1.5"/>
+      <circle cx="12" cy="12" r="8.3" fill="none" stroke="currentColor" stroke-width="1.4" stroke-dasharray="3.1 3.3"/>
+      <path d="M12 1.8v2.1M12 20.1v2.1M1.8 12h2.1M20.1 12h2.1M4.8 4.8l1.5 1.5M17.7 17.7l1.5 1.5M19.2 4.8l-1.5 1.5M6.3 17.7l-1.5 1.5" fill="none" stroke="currentColor" stroke-width="1.35" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="si-sliders" viewBox="0 0 24 24">
+      <path d="M4 6.5h16M4 12h16M4 17.5h16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+      <circle cx="9.2" cy="6.5" r="2.1" fill="none" stroke="currentColor" stroke-width="1.4"/>
+      <circle cx="15.1" cy="12" r="2.1" fill="none" stroke="currentColor" stroke-width="1.4"/>
+      <circle cx="7.4" cy="17.5" r="2.1" fill="none" stroke="currentColor" stroke-width="1.4"/>
+    </symbol>
+    <symbol id="si-search" viewBox="0 0 24 24">
+      <circle cx="10.6" cy="10.6" r="6.2" fill="none" stroke="currentColor" stroke-width="1.6"/>
+      <path d="m15.2 15.2 4.4 4.4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="si-music" viewBox="0 0 24 24">
+      <path d="M9.2 17.4V5.6l9.2-1.8v11.8" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <ellipse cx="6.6" cy="17.7" rx="2.7" ry="2.1" fill="none" stroke="currentColor" stroke-width="1.4"/>
+      <ellipse cx="15.8" cy="15.9" rx="2.7" ry="2.1" fill="none" stroke="currentColor" stroke-width="1.4"/>
+      <path d="M9.2 9.2l9.2-1.8" fill="none" stroke="currentColor" stroke-width="1.4" opacity=".55"/>
+    </symbol>
+    <symbol id="si-focus" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="1.5"/>
+      <circle cx="12" cy="12" r="4.4" fill="none" stroke="currentColor" stroke-width="1.3" opacity=".6"/>
+      <circle cx="12" cy="12" r="1.3" fill="currentColor"/>
+    </symbol>
+    <symbol id="si-back" viewBox="0 0 24 24">
+      <path d="m14.5 6-6 6 6 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="si-close" viewBox="0 0 24 24">
+      <path d="m6 6 12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="si-play" viewBox="0 0 24 24">
+      <path d="M8 5.8 18 12 8 18.2V5.8Z" fill="currentColor"/>
+    </symbol>
+    <symbol id="si-pause" viewBox="0 0 24 24">
+      <rect x="7" y="5.5" width="3.3" height="13" rx="1.4" fill="currentColor"/>
+      <rect x="13.7" y="5.5" width="3.3" height="13" rx="1.4" fill="currentColor"/>
+    </symbol>
+    <symbol id="si-prev" viewBox="0 0 24 24">
+      <path d="M6.5 5.5v13M17.5 6.5 9 12l8.5 5.5v-11Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="si-next" viewBox="0 0 24 24">
+      <path d="M17.5 5.5v13M6.5 6.5 15 12l-8.5 5.5v-11Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="si-volume" viewBox="0 0 24 24">
+      <path d="M4.5 9.2h3.6L13 5.3v13.4l-4.9-3.9H4.5V9.2Z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/>
+      <path d="M16.2 9.1a4.4 4.4 0 0 1 0 5.8M18.7 6.8a7.7 7.7 0 0 1 0 10.4" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="si-check" viewBox="0 0 24 24">
+      <path d="m5 12.4 4.4 4.1L19 6.8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+  </svg>
+
+  <section class="sez-desktop" id="sezDesktop" role="dialog" aria-modal="true" aria-labelledby="sezTitle" aria-hidden="true" inert>
+    <div class="sez-ambient" aria-hidden="true">
+      <img class="sez-ambient-image" src="assets/scene-dusk.svg" alt="">
+      <div class="sez-ambient-veil"></div>
+      <div class="sez-ambient-glow"></div>
+      <div class="liquid-flow sez-ambient-flow"><i></i><i></i><i></i></div>
+      <span class="sez-ambient-word">SEZ</span>
+    </div>
+
+    <header class="sez-topbar">
+      <div class="sez-topbar-brand">
+        <span class="sez-brand-mark" aria-hidden="true"><i></i><i></i></span>
+        <span class="sez-brand-name">SEZ</span>
+        <span class="sez-brand-sub">/ LIQUID DESKTOP</span>
+      </div>
+      <p class="sez-topbar-status"><span class="live-dot"></span> OS 01 <i></i> <span data-sez-clock>02:45</span> <i></i> LIVE</p>
+      <button class="sez-sleep" id="sezSleep" type="button" aria-label="休眠液态桌面">
+        <span>休眠</span>
+        <kbd>ESC</kbd>
+        <svg width="15" height="15" aria-hidden="true"><use href="#si-close"></use></svg>
+      </button>
+    </header>
+
+    <div class="sez-stage">
+      <aside class="sez-intro">
+        <p class="sez-eyebrow"><span class="live-dot"></span> WAKE COMPLETE</p>
+        <h2 id="sezTitle">一块可以<br><em>触碰</em>的桌面。</h2>
+        <p class="sez-intro-copy">光在玻璃里有了厚度。轻触，打开；上滑，返回。这里没有页面跳转，只有一层又一层可以触摸的界面。</p>
+        <div class="sez-hints">
+          <span><b>01</b> 轻触图标，打开应用</span>
+          <span><b>02</b> 从底部上滑，或点击横条返回</span>
+          <span><b>03</b> 按 ESC，随时休眠</span>
+        </div>
+        <div class="sez-intro-foot"><span class="live-dot"></span> LOCAL / SHANGHAI <span data-sez-clock>02:45</span></div>
+      </aside>
+
+      <div class="sez-device" id="sezDevice">
+        <span class="sez-button sez-button--power" aria-hidden="true"></span>
+        <span class="sez-button sez-button--volume-up" aria-hidden="true"></span>
+        <span class="sez-button sez-button--volume-down" aria-hidden="true"></span>
+        <div class="sez-frame">
+          <span class="sez-island" aria-hidden="true"><i></i></span>
+          <div class="sez-screen" id="sezScreen">
+            <div class="sez-wallpapers" aria-hidden="true">
+              <img class="is-active" data-sez-wallpaper="aurora" src="assets/scene-aurora.svg" alt="">
+              <img data-sez-wallpaper="dusk" src="assets/scene-dusk.svg" alt="">
+              <img data-sez-wallpaper="tide" src="assets/scene-tide.svg" alt="">
+            </div>
+            <div class="sez-screen-tint" aria-hidden="true"></div>
+            <div class="liquid-flow sez-phone-flow" aria-hidden="true"><i></i><i></i><i></i></div>
+
+            <div class="sez-status" aria-hidden="true">
+              <span data-sez-clock>02:45</span>
+              <span class="sez-status-icons">
+                <svg viewBox="0 0 18 12" width="15" height="10"><path d="M1 9h2v2H1V9Zm4-3h2v5H5V6Zm4-3h2v8H9V3Zm4-3h2v11h-2V0Z" fill="currentColor"/></svg>
+                <svg viewBox="0 0 16 12" width="14" height="10"><path d="M8 9.8 6.4 8.2a2.3 2.3 0 0 1 3.2 0L8 9.8ZM8 6.2c-1.2 0-2.3.5-3.1 1.3L3.7 6.3A6.2 6.2 0 0 1 8 4.7c1.6 0 3.2.6 4.3 1.6l-1.2 1.2A4.4 4.4 0 0 0 8 6.2ZM8 2.6c-2.2 0-4.2.9-5.7 2.4L1.1 3.8A9.7 9.7 0 0 1 8 1.1c2.6 0 5 1 6.9 2.7l-1.2 1.2A8 8 0 0 0 8 2.6Z" fill="currentColor"/></svg>
+                <svg viewBox="0 0 26 12" width="21" height="10"><rect x=".5" y=".5" width="21" height="11" rx="3.5" fill="none" stroke="currentColor" opacity=".5"/><rect x="2.5" y="2.5" width="16" height="7" rx="1.8" fill="currentColor"/><path d="M23 4v4c1.2-.5 1.6-1 1.6-2S24.2 4.5 23 4Z" fill="currentColor" opacity=".5"/></svg>
+              </span>
+            </div>
+
+            <div class="sez-home-view" id="sezHomeView">
+              <div class="sez-home-head">
+                <div class="sez-home-timeblock">
+                  <p class="sez-home-time" data-sez-clock>02:56</p>
+                  <p class="sez-date"><span data-sez-date>11月11日 · 星期三</span></p>
+                </div>
+                <div class="sez-home-side">
+                  <p class="sez-greeting"><span data-sez-greeting>夜深了</span>，SEZ。</p>
+                  <span class="sez-home-chip">SHANGHAI · 18°</span>
+                </div>
+              </div>
+
+              <button class="sez-weather-widget" type="button" data-sez-open="weather" aria-label="打开天气应用">
+                <span class="sez-widget-top"><span>SEZ WEATHER</span><span data-sez-clock>02:45</span></span>
+                <span class="sez-weather-main">
+                  <span class="sez-weather-temp">18°</span>
+                  <span class="sez-weather-copy">薄雾<br><i>光正穿过云层</i></span>
+                  <span class="sez-weather-sun" aria-hidden="true"><i></i><i></i><i></i></span>
+                </span>
+                <span class="sez-weather-bars" aria-hidden="true">
+                  <i style="--h:34%"></i><i style="--h:48%"></i><i style="--h:37%"></i><i style="--h:61%"></i><i style="--h:52%"></i><i style="--h:76%"></i><i style="--h:58%"></i><i style="--h:45%"></i>
+                </span>
+              </button>
+
+              <div class="sez-app-grid">
+                <button class="sez-app-icon" type="button" data-sez-open="weather">
+                  <span class="sez-icon-art sez-icon-art--weather"><svg width="25" height="25" aria-hidden="true"><use href="#si-cloud-sun"></use></svg></span>
+                  <span class="sez-icon-label">天气</span>
+                </button>
+                <button class="sez-app-icon" type="button" data-sez-open="notes">
+                  <span class="sez-icon-art sez-icon-art--notes"><svg width="24" height="24" aria-hidden="true"><use href="#si-note"></use></svg></span>
+                  <span class="sez-icon-label">笔记</span>
+                </button>
+                <button class="sez-app-icon" type="button" data-sez-open="photos">
+                  <span class="sez-icon-art sez-icon-art--photos"><svg width="25" height="25" aria-hidden="true"><use href="#si-photo"></use></svg></span>
+                  <span class="sez-icon-label">照片</span>
+                </button>
+                <button class="sez-app-icon" type="button" data-sez-open="settings">
+                  <span class="sez-icon-art sez-icon-art--settings"><svg width="24" height="24" aria-hidden="true"><use href="#si-gear"></use></svg></span>
+                  <span class="sez-icon-label">设置</span>
+                </button>
+              </div>
+
+              <div class="sez-home-mid">
+                <span class="sez-home-quote">Make room<br>for light.</span>
+                <span class="sez-home-index">SEZ / 01</span>
+              </div>
+
+              <div class="sez-dock" aria-label="系统工具">
+                <button class="sez-dock-icon" type="button" data-sez-open="control" aria-label="打开控制中心">
+                  <span><svg width="23" height="23" aria-hidden="true"><use href="#si-sliders"></use></svg></span>
+                </button>
+                <button class="sez-dock-icon" type="button" data-sez-open="search" aria-label="打开搜索">
+                  <span><svg width="23" height="23" aria-hidden="true"><use href="#si-search"></use></svg></span>
+                </button>
+                <button class="sez-dock-icon" type="button" data-sez-open="music" aria-label="打开环境音乐">
+                  <span><svg width="23" height="23" aria-hidden="true"><use href="#si-music"></use></svg></span>
+                </button>
+                <button class="sez-dock-icon" type="button" data-sez-open="focus" aria-label="打开专注计时">
+                  <span><svg width="23" height="23" aria-hidden="true"><use href="#si-focus"></use></svg></span>
+                </button>
+              </div>
+            </div>
+
+            <div class="sez-app-layer" id="sezAppLayer" aria-hidden="true" inert>
+              <section class="sez-app-view" data-sez-view="weather" aria-label="天气应用" aria-hidden="true" inert>
+                <header class="sez-view-head">
+                  <button class="sez-back" type="button" data-sez-back aria-label="返回桌面"><svg width="22" height="22" aria-hidden="true"><use href="#si-back"></use></svg></button>
+                  <div class="sez-view-title"><span>SEZ / WEATHER</span><h2>天气</h2></div>
+                  <span class="sez-view-tag">上海</span>
+                </header>
+                <div class="sez-view-scroll">
+                  <section class="sez-we-hero">
+                    <div class="sez-we-meta"><span>SHANGHAI</span><span>薄雾 · 18°</span></div>
+                    <div class="sez-we-big">18°</div>
+                    <p>光正穿过云层，今天的风适合慢一点。</p>
+                    <div class="sez-we-orb" aria-hidden="true"><i></i><i></i></div>
+                  </section>
+                  <section class="sez-glass-card sez-we-hourly">
+                    <div class="sez-card-head"><span>今日光线</span><span>18° / 12°</span></div>
+                    <div class="sez-we-hours">
+                      <div><span>现在</span><b>18°</b><i style="--h:74%"></i></div>
+                      <div><span>04时</span><b>17°</b><i style="--h:64%"></i></div>
+                      <div><span>08时</span><b>16°</b><i style="--h:53%"></i></div>
+                      <div><span>12时</span><b>20°</b><i style="--h:87%"></i></div>
+                      <div><span>16时</span><b>21°</b><i style="--h:95%"></i></div>
+                      <div><span>20时</span><b>18°</b><i style="--h:69%"></i></div>
+                    </div>
+                  </section>
+                  <section class="sez-glass-card sez-forecast">
+                    <div class="sez-forecast-row"><span>周四</span><i aria-hidden="true"><svg width="17" height="17"><use href="#i-sun"></use></svg></i><b>19° / 12°</b></div>
+                    <div class="sez-forecast-row"><span>周五</span><i aria-hidden="true"><svg width="17" height="17"><use href="#i-sun"></use></svg></i><b>21° / 13°</b></div>
+                    <div class="sez-forecast-row"><span>周六</span><i aria-hidden="true"><svg width="17" height="17"><use href="#i-sun"></use></svg></i><b>20° / 14°</b></div>
+                    <div class="sez-forecast-row"><span>周日</span><i aria-hidden="true"><svg width="17" height="17"><use href="#i-sun"></use></svg></i><b>18° / 11°</b></div>
+                  </section>
+                </div>
+              </section>
+
+              <section class="sez-app-view" data-sez-view="notes" aria-label="笔记应用" aria-hidden="true" inert>
+                <header class="sez-view-head">
+                  <button class="sez-back" type="button" data-sez-back aria-label="返回桌面"><svg width="22" height="22" aria-hidden="true"><use href="#si-back"></use></svg></button>
+                  <div class="sez-view-title"><span>SEZ / NOTES</span><h2>笔记</h2></div>
+                  <span class="sez-view-tag" id="sezNoteState">LOCAL</span>
+                </header>
+                <div class="sez-notes-wrap">
+                  <div class="sez-notes-head"><span>UNTITLED / 01</span><span>自动保存于此设备</span></div>
+                  <textarea class="sez-note-input" id="sezNoteInput" maxlength="900" spellcheck="false" aria-label="SEZ 笔记内容" placeholder="写一句留给光的话。"></textarea>
+                  <div class="sez-notes-foot">
+                    <span>光会记得你写下的话。</span>
+                    <button class="sez-text-button" type="button" id="sezNoteClear">清空</button>
+                  </div>
+                </div>
+              </section>
+
+              <section class="sez-app-view" data-sez-view="photos" aria-label="照片应用" aria-hidden="true" inert>
+                <header class="sez-view-head">
+                  <button class="sez-back" type="button" data-sez-back aria-label="返回桌面"><svg width="22" height="22" aria-hidden="true"><use href="#si-back"></use></svg></button>
+                  <div class="sez-view-title"><span>SEZ / PHOTOS</span><h2>照片</h2></div>
+                  <span class="sez-view-tag">06</span>
+                </header>
+                <div class="sez-view-scroll">
+                  <p class="sez-photos-kicker">LIGHT STUDIES / 06</p>
+                  <div class="sez-photo-grid">
+                    <button class="sez-photo" type="button" data-sez-photo="0" data-caption="极光 / 01" aria-label="查看照片 01"><img src="assets/scene-aurora.svg" alt=""><span>01</span></button>
+                    <button class="sez-photo sez-photo--warm" type="button" data-sez-photo="1" data-caption="落日 / 02" aria-label="查看照片 02"><img src="assets/scene-dusk.svg" alt=""><span>02</span></button>
+                    <button class="sez-photo sez-photo--cool" type="button" data-sez-photo="2" data-caption="潮汐 / 03" aria-label="查看照片 03"><img src="assets/scene-tide.svg" alt=""><span>03</span></button>
+                    <button class="sez-photo sez-photo--violet" type="button" data-sez-photo="3" data-caption="光的背面 / 04" aria-label="查看照片 04"><img src="assets/scene-dusk.svg" alt=""><span>04</span></button>
+                    <button class="sez-photo sez-photo--green" type="button" data-sez-photo="4" data-caption="水面以下 / 05" aria-label="查看照片 05"><img src="assets/scene-tide.svg" alt=""><span>05</span></button>
+                    <button class="sez-photo sez-photo--deep" type="button" data-sez-photo="5" data-caption="凌晨三点 / 06" aria-label="查看照片 06"><img src="assets/scene-aurora.svg" alt=""><span>06</span></button>
+                  </div>
+                </div>
+                <div class="sez-photo-viewer" id="sezPhotoViewer" role="dialog" aria-label="照片预览" aria-hidden="true">
+                  <button class="sez-photo-close" type="button" id="sezPhotoClose" aria-label="关闭照片"><svg width="19" height="19" aria-hidden="true"><use href="#si-close"></use></svg></button>
+                  <img id="sezPhotoLarge" src="assets/scene-aurora.svg" alt="">
+                  <p id="sezPhotoCaption">极光 / 01</p>
+                </div>
+              </section>
+
+              <section class="sez-app-view" data-sez-view="settings" aria-label="设置应用" aria-hidden="true" inert>
+                <header class="sez-view-head">
+                  <button class="sez-back" type="button" data-sez-back aria-label="返回桌面"><svg width="22" height="22" aria-hidden="true"><use href="#si-back"></use></svg></button>
+                  <div class="sez-view-title"><span>SEZ / SETTINGS</span><h2>设置</h2></div>
+                  <span class="sez-view-tag">OS 01</span>
+                </header>
+                <div class="sez-view-scroll sez-settings-scroll">
+                  <section class="sez-settings-section">
+                    <h3>桌面壁纸</h3>
+                    <div class="sez-wallpaper-grid">
+                      <button class="sez-wall-option is-active" type="button" data-sez-wallpaper-option="aurora" aria-pressed="true"><img src="assets/scene-aurora.svg" alt=""><span>极光</span></button>
+                      <button class="sez-wall-option" type="button" data-sez-wallpaper-option="dusk" aria-pressed="false"><img src="assets/scene-dusk.svg" alt=""><span>落日</span></button>
+                      <button class="sez-wall-option" type="button" data-sez-wallpaper-option="tide" aria-pressed="false"><img src="assets/scene-tide.svg" alt=""><span>潮汐</span></button>
+                    </div>
+                  </section>
+                  <section class="sez-settings-section">
+                    <h3>光色</h3>
+                    <div class="sez-accent-row">
+                      <button class="sez-accent is-active" type="button" data-sez-accent="mint" aria-pressed="true" aria-label="薄荷光色"><i></i><span>薄荷</span></button>
+                      <button class="sez-accent" type="button" data-sez-accent="peach" aria-pressed="false" aria-label="蜜桃光色"><i></i><span>蜜桃</span></button>
+                      <button class="sez-accent" type="button" data-sez-accent="blue" aria-pressed="false" aria-label="冰蓝光色"><i></i><span>冰蓝</span></button>
+                    </div>
+                  </section>
+                  <section class="sez-settings-section sez-settings-switches">
+                    <div class="sez-setting-row">
+                      <div><strong>实时高光</strong><small>光会跟随你的指向</small></div>
+                      <button class="sez-switch is-on" type="button" role="switch" aria-checked="true" data-sez-setting="glare" aria-label="实时高光"><span></span></button>
+                    </div>
+                    <div class="sez-setting-row">
+                      <div><strong>流动动效</strong><small>让玻璃保持呼吸</small></div>
+                      <button class="sez-switch is-on" type="button" role="switch" aria-checked="true" data-sez-setting="motion" aria-label="流动动效"><span></span></button>
+                    </div>
+                  </section>
+                  <p class="sez-settings-note">所有改变都只发生在 SEZ 桌面里，不会离开此页。</p>
+                </div>
+              </section>
+
+              <section class="sez-app-view" data-sez-view="control" aria-label="控制中心" aria-hidden="true" inert>
+                <header class="sez-view-head">
+                  <button class="sez-back" type="button" data-sez-back aria-label="返回桌面"><svg width="22" height="22" aria-hidden="true"><use href="#si-back"></use></svg></button>
+                  <div class="sez-view-title"><span>SEZ / CONTROL</span><h2>控制中心</h2></div>
+                  <span class="sez-view-tag">LIVE</span>
+                </header>
+                <div class="sez-view-scroll sez-control-scroll">
+                  <div class="sez-control-grid">
+                    <button class="sez-control-tile is-on" type="button" data-sez-quick="wifi" aria-pressed="true"><svg width="21" height="21" aria-hidden="true"><use href="#i-wave"></use></svg><span>WI-FI</span><b>ON</b></button>
+                    <button class="sez-control-tile is-on" type="button" role="switch" aria-checked="true" data-sez-setting="glare"><svg width="21" height="21" aria-hidden="true"><use href="#i-spark"></use></svg><span>高光</span><b>ON</b></button>
+                    <button class="sez-control-tile is-on" type="button" role="switch" aria-checked="true" data-sez-setting="motion"><svg width="21" height="21" aria-hidden="true"><use href="#si-focus"></use></svg><span>流动</span><b>ON</b></button>
+                    <button class="sez-control-tile" type="button" data-sez-open="search"><svg width="21" height="21" aria-hidden="true"><use href="#si-search"></use></svg><span>搜索</span><b>OPEN</b></button>
+                  </div>
+                  <div class="sez-control-slider">
+                    <div class="sez-slider-label"><span>亮度</span><output for="sezBrightness" id="sezBrightnessOut">88%</output></div>
+                    <input class="sez-range" id="sezBrightness" type="range" min="30" max="100" value="88" step="1" aria-label="桌面亮度">
+                  </div>
+                  <div class="sez-control-slider">
+                    <div class="sez-slider-label"><span>音量</span><output for="sezVolume" id="sezVolumeOut">62%</output></div>
+                    <input class="sez-range" id="sezVolume" type="range" min="0" max="100" value="62" step="1" aria-label="音量">
+                  </div>
+                  <div class="sez-control-wallpapers">
+                    <span>壁纸</span>
+                    <button type="button" data-sez-wallpaper-option="aurora" aria-label="切换极光壁纸" aria-pressed="true"><img src="assets/scene-aurora.svg" alt=""></button>
+                    <button type="button" data-sez-wallpaper-option="dusk" aria-label="切换落日壁纸" aria-pressed="false"><img src="assets/scene-dusk.svg" alt=""></button>
+                    <button type="button" data-sez-wallpaper-option="tide" aria-label="切换潮汐壁纸" aria-pressed="false"><img src="assets/scene-tide.svg" alt=""></button>
+                  </div>
+                  <button class="sez-control-sleep" type="button" data-sez-action="sleep"><span class="live-dot"></span> 休眠桌面</button>
+                </div>
+              </section>
+
+              <section class="sez-app-view" data-sez-view="search" aria-label="搜索" aria-hidden="true" inert>
+                <header class="sez-view-head">
+                  <button class="sez-back" type="button" data-sez-back aria-label="返回桌面"><svg width="22" height="22" aria-hidden="true"><use href="#si-back"></use></svg></button>
+                  <div class="sez-view-title"><span>SEZ / SEARCH</span><h2>搜索</h2></div>
+                  <span class="sez-view-tag">ALL</span>
+                </header>
+                <div class="sez-search-app">
+                  <label class="sez-search-field" for="sezSearchInput">
+                    <svg width="18" height="18" aria-hidden="true"><use href="#si-search"></use></svg>
+                    <input id="sezSearchInput" type="text" placeholder="搜索 SEZ 桌面" autocomplete="off" />
+                  </label>
+                  <div class="sez-search-results" id="sezSearchResults">
+                    <button type="button" data-sez-open="weather" data-sez-keywords="weather 天气 tianqi"><span>天气</span><small>Weather</small></button>
+                    <button type="button" data-sez-open="notes" data-sez-keywords="notes note 笔记 便签"><span>笔记</span><small>Notes</small></button>
+                    <button type="button" data-sez-open="photos" data-sez-keywords="photos photo 照片 图库"><span>照片</span><small>Photos</small></button>
+                    <button type="button" data-sez-open="settings" data-sez-keywords="settings 设置 偏好"><span>设置</span><small>Settings</small></button>
+                    <button type="button" data-sez-open="music" data-sez-keywords="music ambient audio 音乐 环境 声音 氛围"><span>音乐</span><small>Music / Ambient</small></button>
+                    <button type="button" data-sez-open="focus" data-sez-keywords="focus timer 专注 计时 番茄"><span>专注</span><small>Focus</small></button>
+                    <button type="button" data-sez-open="control" data-sez-keywords="control center 控制中心 设置 亮度 音量"><span>控制中心</span><small>Control</small></button>
+                  </div>
+                  <p class="sez-search-empty" id="sezSearchEmpty" hidden>没有找到这项光。</p>
+                </div>
+              </section>
+
+              <section class="sez-app-view" data-sez-view="music" aria-label="音乐" aria-hidden="true" inert>
+                <header class="sez-view-head">
+                  <button class="sez-back" type="button" data-sez-back aria-label="返回桌面"><svg width="22" height="22" aria-hidden="true"><use href="#si-back"></use></svg></button>
+                  <div class="sez-view-title"><span>SEZ / AMBIENT</span><h2>音乐</h2></div>
+                  <span class="sez-view-tag" id="sezMusicTag">GEN</span>
+                </header>
+                <div class="sez-music-view">
+                  <div class="sez-album-art" id="sezAlbumArt" aria-hidden="true">
+                    <span class="sez-album-ring"></span>
+                    <span class="sez-album-ring sez-album-ring--two"></span>
+                    <span class="sez-album-core"></span>
+                    <b>SEZ</b>
+                  </div>
+                  <div class="sez-track-meta">
+                    <span>GENERATIVE STUDY / 01</span>
+                    <h3 id="sezTrackTitle">Liquid Hours</h3>
+                    <p id="sezTrackArtist">SEZ · Ambient 01</p>
+                  </div>
+                  <div class="sez-visualizer" id="sezVisualizer" aria-hidden="true">
+                    <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+                  </div>
+                  <div class="sez-music-controls">
+                    <button class="sez-music-side" type="button" data-sez-music-prev aria-label="上一首"><svg width="20" height="20" aria-hidden="true"><use href="#si-prev"></use></svg></button>
+                    <button class="sez-play-button" type="button" data-sez-music-play aria-label="播放音乐"><svg width="25" height="25" aria-hidden="true"><use href="#si-play" id="sezPlayIcon"></use></svg></button>
+                    <button class="sez-music-side" type="button" data-sez-music-next aria-label="下一首"><svg width="20" height="20" aria-hidden="true"><use href="#si-next"></use></svg></button>
+                  </div>
+                  <div class="sez-music-vol">
+                    <svg width="16" height="16" aria-hidden="true"><use href="#si-volume"></use></svg>
+                    <input class="sez-range" id="sezMusicVolume" type="range" min="0" max="100" value="62" step="1" aria-label="音乐音量">
+                    <span id="sezMusicState">TAP TO PLAY</span>
+                  </div>
+                </div>
+              </section>
+
+              <section class="sez-app-view" data-sez-view="focus" aria-label="专注计时" aria-hidden="true" inert>
+                <header class="sez-view-head">
+                  <button class="sez-back" type="button" data-sez-back aria-label="返回桌面"><svg width="22" height="22" aria-hidden="true"><use href="#si-back"></use></svg></button>
+                  <div class="sez-view-title"><span>SEZ / FOCUS</span><h2>专注</h2></div>
+                  <span class="sez-view-tag">NOW</span>
+                </header>
+                <div class="sez-focus-view">
+                  <p class="sez-focus-kicker">BE HERE / NOW</p>
+                  <div class="sez-focus-ring" id="sezFocusRing" style="--focus-progress:0%">
+                    <div class="sez-focus-inner">
+                      <span class="sez-focus-time" id="sezFocusTime">25:00</span>
+                      <small id="sezFocusLabel">DEEP FOCUS</small>
+                    </div>
+                  </div>
+                  <div class="sez-focus-modes" aria-label="专注时长">
+                    <button class="is-active" type="button" data-sez-focus-mode="25" aria-pressed="true" aria-label="25 分钟">25</button>
+                    <button type="button" data-sez-focus-mode="45" aria-pressed="false" aria-label="45 分钟">45</button>
+                    <button type="button" data-sez-focus-mode="5" aria-pressed="false" aria-label="5 分钟">5</button>
+                  </div>
+                  <div class="sez-focus-actions">
+                    <button class="sez-focus-primary" type="button" id="sezFocusToggle">开始专注</button>
+                    <button class="sez-focus-reset" type="button" id="sezFocusReset" aria-label="重置专注计时"><svg width="17" height="17" aria-hidden="true"><use href="#i-reset"></use></svg></button>
+                  </div>
+                  <p class="sez-focus-note">专注，是给光一条只向前的路径。</p>
+                </div>
+              </section>
+            </div>
+
+            <button class="sez-home-indicator" type="button" id="sezHomeIndicator" aria-label="返回桌面"><span></span></button>
+            <div class="sez-toast" id="sezToast" role="status" aria-live="polite"></div>
+            <div class="sez-brightness" id="sezBrightnessOverlay" aria-hidden="true"></div>
+          </div>
+          <span class="sez-glare" id="sezGlare" aria-hidden="true"></span>
+        </div>
+      </div>
+
+      <span class="sez-side-note" aria-hidden="true">SEZ / LIQUID OS<br>MADE TO BE TOUCHED</span>
+    </div>
+
+    <footer class="sez-bottombar">
+      <span><span class="live-dot"></span> SEZ OS 01</span>
+      <span>NO LINKS / ONLY SURFACES</span>
+      <span>ESC TO SLEEP</span>
+    </footer>
+  </section>
+
+  <p class="sr-only" id="wakeStatus" role="status" aria-live="polite"></p>
+  <script src="app.js"></script>
+  <script src="desktop.js"></script>
+</body>
+</html>
