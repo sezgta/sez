@@ -482,21 +482,17 @@
       return;
     }
 
-    const compact = compactMotion();
+    // Match the computer desktop window close exactly: a short drop, a
+    // restrained scale-down and a fade, around the window centre.
+    view.style.transformOrigin = '50% 50%';
     const animation = view.animate(
-      compact
-        ? [
-            { opacity: 1, transform: 'translateY(0) scale(1)' },
-            { opacity: .92, transform: 'translateY(7px) scale(.97)', offset: .35 },
-            { opacity: 0, transform: 'translateY(34px) scale(.9)' },
-          ]
-        : [
-            { opacity: 1, transform: 'scale(1)' },
-            { opacity: 0, transform: 'scale(.1)' },
-          ],
+      [
+        { opacity: 1, transform: 'translateY(0) scale(1)' },
+        { opacity: 0, transform: 'translateY(20px) scale(.96)' },
+      ],
       {
-        duration: compact ? 320 : 360,
-        easing: compact ? 'cubic-bezier(.32, .72, .24, 1)' : 'cubic-bezier(.4, 0, .2, 1)',
+        duration: 420,
+        easing: 'cubic-bezier(.16, 1, .3, 1)',
         fill: 'forwards',
       }
     );
