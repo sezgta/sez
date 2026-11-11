@@ -8838,6 +8838,7 @@ html.sez-lock {
 
   .stage-frame {
     touch-action: pan-y;
+    transform: translateZ(0);
   }
 
   .stage-lens,
@@ -8845,15 +8846,92 @@ html.sez-lock {
     pointer-events: none;
   }
 
-  .title-orb,
-  .seal-orbit,
-  .liquid-flow i {
+  .stage-sheen {
+    display: block;
+  }
+
+  .title-orb {
+    animation: orbFloat 9s ease-in-out infinite;
+  }
+
+  .seal-orbit {
     animation: none;
   }
 
   .liquid-flow i {
-    filter: blur(26px);
-    opacity: .45;
+    animation: mobileFlow 15s ease-in-out infinite alternate;
+    filter: blur(28px);
+    opacity: .46;
+    will-change: transform;
+  }
+
+  .liquid-flow i:nth-child(2) {
+    animation-delay: -5s;
+  }
+
+  .liquid-flow i:nth-child(3) {
+    animation-delay: -9s;
+  }
+}
+
+/* A single cheap specular sweep makes the preview feel fluid while the page
+   is being scrolled on a touch device. It is transform-only and disabled on
+   larger screens. */
+.stage-sheen {
+  position: absolute;
+  z-index: 6;
+  inset: -18%;
+  display: none;
+  pointer-events: none;
+  background: linear-gradient(108deg, transparent 31%, rgba(255, 255, 255, .16) 45%, rgba(198, 255, 239, .06) 52%, transparent 64%);
+  mix-blend-mode: screen;
+  transform: translate3d(-35%, 0, 0) rotate(2deg);
+  animation: stageSweep 8s cubic-bezier(.4, 0, .3, 1) infinite;
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+}
+
+@keyframes stageSweep {
+  0%, 18% { transform: translate3d(-38%, 0, 0) rotate(2deg); opacity: 0; }
+  36% { opacity: .68; }
+  68% { transform: translate3d(34%, 0, 0) rotate(2deg); opacity: .32; }
+  88%, 100% { transform: translate3d(48%, 0, 0) rotate(2deg); opacity: 0; }
+}
+
+@keyframes mobileFlow {
+  0% { transform: translate3d(-4%, 2%, 0) scale(.96); }
+  50% { transform: translate3d(3%, -3%, 0) scale(1.045); }
+  100% { transform: translate3d(-2%, 4%, 0) scale(1); }
+}
+
+/* Text selection is an intentional part of this interface only inside real
+   form fields; the rest of SEZ is a surface, not a document. */
+html,
+body,
+body * {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
+body input,
+body textarea,
+body select,
+body [contenteditable="true"],
+body .allow-select {
+  -webkit-user-select: text !important;
+  user-select: text !important;
+}
+
+@media (max-width: 760px), (hover: none) and (pointer: coarse) {
+  .stage-sheen {
+    display: block;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stage-sheen {
+    display: none;
   }
 }
 

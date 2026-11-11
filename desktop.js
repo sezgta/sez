@@ -444,20 +444,24 @@
     const name = activeName;
     const trigger = activeTrigger;
 
+    // Keep the app layer visible for the whole return animation. It used to be
+    // marked inactive immediately, which made the view appear to vanish before
+    // the close animation could be seen. The home screen also stays behind the
+    // glass until the app has actually left.
     view.inert = true;
     view.setAttribute('aria-hidden', 'true');
-    homeView.inert = false;
-    homeView.setAttribute('aria-hidden', 'false');
-    homeView.classList.remove('is-app-open');
-    appLayer.classList.remove('is-active');
-    appLayer.inert = true;
-    appLayer.setAttribute('aria-hidden', 'true');
 
     const finish = () => {
       view.classList.remove('is-open');
       view.style.zIndex = '';
       view.inert = true;
       view.setAttribute('aria-hidden', 'true');
+      appLayer.classList.remove('is-active');
+      appLayer.inert = true;
+      appLayer.setAttribute('aria-hidden', 'true');
+      homeView.inert = false;
+      homeView.setAttribute('aria-hidden', 'false');
+      homeView.classList.remove('is-app-open');
       if (activeView === view) {
         activeView = null;
         activeName = '';
@@ -483,15 +487,16 @@
       compact
         ? [
             { opacity: 1, transform: 'translateY(0) scale(1)' },
-            { opacity: 0, transform: 'translateY(10px) scale(.99)' },
+            { opacity: .92, transform: 'translateY(7px) scale(.97)', offset: .35 },
+            { opacity: 0, transform: 'translateY(34px) scale(.9)' },
           ]
         : [
             { opacity: 1, transform: 'scale(1)' },
             { opacity: 0, transform: 'scale(.1)' },
           ],
       {
-        duration: compact ? 230 : 360,
-        easing: compact ? 'cubic-bezier(.3, 0, .4, 1)' : 'cubic-bezier(.4, 0, .2, 1)',
+        duration: compact ? 320 : 360,
+        easing: compact ? 'cubic-bezier(.32, .72, .24, 1)' : 'cubic-bezier(.4, 0, .2, 1)',
         fill: 'forwards',
       }
     );
