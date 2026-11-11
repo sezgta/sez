@@ -21,6 +21,13 @@
   const lightboxCaption = $('#szosLightboxCaption');
   const lightboxClose = $('#szosLightboxClose');
   const toastEl = $('#szosToast');
+  const studioForm = $('#szosStudioForm');
+  const studioStatus = $('#szosStudioStatus');
+  const studioCopy = $('#szosStudioCopy');
+  const studioContactLine = $('#szosStudioContactLine');
+  const studioBriefPanel = $('#szosStudioBrief');
+  const studioBriefText = $('#szosStudioBriefText');
+  const studioConfig = window.SEZ_STUDIO || {};
   const noteInput = $('#szosNoteInput');
   const noteState = $('#szosNoteState');
   const noteClear = $('#szosNoteClear');
@@ -100,6 +107,7 @@
     music: { title: '音乐', subtitle: 'GENERATIVE AMBIENT', icon: 'si-music', keywords: 'music 音乐 ambient 环境音' },
     settings: { title: '设置', subtitle: 'DESKTOP APPEARANCE', icon: 'si-gear', keywords: 'settings 设置 壁纸 光色' },
     focus: { title: '专注', subtitle: 'DEEP WORK / TIMER', icon: 'si-focus', keywords: 'focus 专注 计时' },
+    studio: { title: 'SEZ Studio', subtitle: 'SERVICES / WORK / CONTACT', icon: 'si-command', keywords: 'studio work with sez 合作 服务 报价 项目 contact hire' },
   };
 
   const presets = {
@@ -110,6 +118,7 @@
     music: { width: 500, height: 548, align: 'right', top: 52 },
     settings: { width: 620, height: 474, align: 'center', top: 58 },
     focus: { width: 440, height: 540, align: 'center', top: 58 },
+    studio: { width: 800, height: 700, align: 'center', top: 24 },
   };
 
   /* ------------------------------------------------------------------
@@ -452,10 +461,11 @@
      Open / close the computer desktop
   ------------------------------------------------------------------ */
 
-  function openOS(trigger) {
+  function openOS(trigger, requestedWindow = 'welcome') {
     if (isOpen || isClosing) return;
 
     isOpen = true;
+    const targetWindow = windows.has(requestedWindow) ? requestedWindow : 'welcome';
     lastTrigger = trigger instanceof HTMLElement ? trigger : document.activeElement;
     updateClock();
     resetWindows();
@@ -486,7 +496,7 @@
 
     window.setTimeout(() => {
       if (!isOpen) return;
-      openWindow('welcome');
+      openWindow(targetWindow);
     }, reduceMotion.matches ? 20 : 320);
   }
 
@@ -821,6 +831,217 @@
     saveNote('');
     noteInput.focus({ preventScroll: true });
     showToast('纸页已经清空');
+  });
+
+  /* ------------------------------------------------------------------
+     Studio inquiries
+  ------------------------------------------------------------------ */
+
+  function studioData() {
+    if (!studioForm) return null;
+    const form = new FormData(studioForm);
+    return {
+      name: String(form.get('name') || '').trim(),
+      email: String(form.get('email') || '').trim(),
+      company: String(form.get('company') || '').trim(),
+      type: String(form.get('type') || '').trim(),
+      budget: String(form.get('budget') || '').trim(),
+      timeline: String(form.get('timeline') || '').trim(),
+      message: String(form.get('message') || '').trim(),
+      consent: Boolean(form.get('consent')),
+      source: 'sez-desktop-studio',
+      createdAt: new Date().toISOString(),
+    };
+  }
+
+  function studioBrief(data) {
+    return [
+      'SEZ STUDIO / PROJECT INQUIRY',
+      '',
+      `Name: ${data.name}`,
+      `Email: ${data.email}`,
+      `Company / Product: ${data.company || '—'}`,
+      `Type: ${data.type}`,
+      `Budget: ${data.budget}`,
+      `Timeline: ${data.timeline || '—'}`,
+      '',
+      'About the product:',
+      data.message,
+      '',
+      '— sent from SEZ Studio / Desktop',
+    ].join('\n');
+  }
+
+  async function copyStudioText(text) {
+    try {
+      await navigator.clipboard.writeText(text);
+      return true;
+    } catch (error) {
+      try {
+        const field = document.createElement('textarea');
+        field.value = text;
+        field.style.position = 'fixed';
+        field.style.opacity = '0';
+        document.body.appendChild(field);
+        field.select();
+        const copied = document.execCommand('copy');
+        field.remove();
+        return copied;
+      } catch (fallbackError) {
+        return false;
+      }
+    }
+  }
+
+  function setStudioStatus(message) {
+    if (!studioStatus) return;
+    studioStatus.textContent = message;
+  }
+
+  function showStudioBrief(brief) {
+    if (!studioBriefPanel || !studioBriefText) return;
+    studioBriefText.value = brief;
+    studioBriefPanel.hidden = false;
+  }
+
+  function scrollStudioSection(target) {
+    const section = $(`[data-studio-section="${target}"]`, overlay);
+    if (!section) return;
+    const body = section.closest('.szos-wbody');
+    if (!body) return;
+    const top = body.scrollTop + section.getBoundingClientRect().top - body.getBoundingClientRect().top - 10;
+    // Programmatic smooth scrolling can be suppressed by embedded/headless
+    // browsers. Direct assignment is deterministic and works with touch.
+    body.scrollTop = Math.max(0, top);
+  }
+
+  function saveStudioInquiry(data, brief) {
+    try {
+      window.localStorage.setItem('sez-studio-inquiry-v1', JSON.stringify({ data, brief }));
+    } catch (error) { /* local storage is optional */ }
+  }
+
+  function syncStudioChannel() {
+    if (!studioContactLine) return;
+    if (studioConfig.email) {
+      studioContactLine.textContent = ` 或直接发送到 ${studioConfig.email}`;
+    } else if (studioConfig.endpoint) {
+      studioContactLine.textContent = ' 提交后会通过安全表单发送。';
+    } else {
+      studioContactLine.textContent = ' 当前为合作通道配置阶段，提交后会先在本机复制简报。';
+    }
+    const submit = $('#szosStudioSubmit');
+    if (submit) submit.firstChild.textContent = studioConfig.email || studioConfig.endpoint ? '发送项目简报 ' : '准备项目简报 ';
+  }
+
+  async function submitStudioInquiry(event) {
+    event.preventDefault();
+    if (!studioForm) return;
+    if (!studioForm.checkValidity()) {
+      studioForm.reportValidity();
+      setStudioStatus('请补全姓名、邮箱、产品介绍，并勾选联系授权。');
+      return;
+    }
+    const data = studioData();
+    if (!data) return;
+    const brief = studioBrief(data);
+    showStudioBrief(brief);
+    const submit = $('#szosStudioSubmit');
+    const original = submit?.innerHTML;
+    if (submit) {
+      submit.disabled = true;
+      submit.textContent = '准备中…';
+    }
+    saveStudioInquiry(data, brief);
+
+    if (studioConfig.endpoint) {
+      try {
+        const response = await fetch(studioConfig.endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify(data),
+        });
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const copied = await copyStudioText(brief);
+        setStudioStatus(copied ? '已发送，简报也已复制。' : '已发送。');
+        showToast('项目简报已发送');
+        if (submit) {
+          submit.innerHTML = original;
+          submit.disabled = false;
+        }
+        return;
+      } catch (error) {
+        setStudioStatus('发送失败，已改为复制简报，请直接联系 SEZ Studio。');
+      }
+    }
+
+    const copied = await copyStudioText(brief);
+    if (studioConfig.email) {
+      const subject = encodeURIComponent(`Project inquiry · ${data.company || data.name}`);
+      const body = encodeURIComponent(brief);
+      window.location.href = `mailto:${studioConfig.email}?subject=${subject}&body=${body}`;
+      setStudioStatus(copied ? '已打开邮件草稿；简报也已复制。' : '已打开邮件草稿。');
+    } else {
+      setStudioStatus(copied ? '项目简报已复制。请把它发给 SEZ Studio。' : '简报已生成，请在下方手动选择复制。');
+      if (!copied) studioBriefText?.select();
+    }
+    if (submit) {
+      submit.innerHTML = original;
+      submit.disabled = false;
+    }
+  }
+
+  if (studioForm) {
+    syncStudioChannel();
+    studioForm.addEventListener('submit', submitStudioInquiry);
+  }
+
+  studioCopy?.addEventListener('click', async () => {
+    if (!studioForm) return;
+    if (!studioForm.checkValidity()) {
+      studioForm.reportValidity();
+      setStudioStatus('请补全姓名、邮箱、产品介绍，并勾选联系授权。');
+      return;
+    }
+    const data = studioData();
+    if (!data) return;
+    const brief = studioBrief(data);
+    showStudioBrief(brief);
+    saveStudioInquiry(data, brief);
+    const copied = await copyStudioText(brief);
+    setStudioStatus(copied ? '项目简报已复制。' : '复制失败，请在下方手动选择文本。');
+    if (!copied) studioBriefText?.select();
+  });
+
+  $$('[data-studio-scroll]', overlay).forEach((button) => {
+    button.addEventListener('click', () => {
+      scrollStudioSection(button.dataset.studioScroll);
+      if (button.dataset.studioScroll === 'contact') {
+        window.setTimeout(() => studioForm?.elements.namedItem('name')?.focus({ preventScroll: true }), 420);
+      }
+    });
+  });
+
+  $$('[data-studio-pick]', overlay).forEach((button) => {
+    button.addEventListener('click', () => {
+      if (!studioForm) return;
+      const pick = button.dataset.studioPick;
+      const type = studioForm.elements.namedItem('type');
+      const budget = studioForm.elements.namedItem('budget');
+      if (pick === 'sprint') {
+        type.value = 'Liquid Sprint';
+        budget.value = '¥30k–50k';
+      } else if (pick === 'launch') {
+        type.value = 'Liquid Launch';
+        budget.value = '¥80k–120k';
+      } else if (pick === 'retainer') {
+        type.value = 'Experience Retainer';
+        budget.value = '月度合作';
+      }
+      scrollStudioSection('contact');
+      window.setTimeout(() => studioForm.elements.namedItem('name')?.focus({ preventScroll: true }), 420);
+      setStudioStatus('已带入套餐信息，补充几行即可提交。');
+    });
   });
 
   /* ------------------------------------------------------------------
@@ -1216,7 +1437,7 @@
   makeWindowsInteractive();
 
   openTriggers.forEach((trigger) => {
-    trigger.addEventListener('click', () => openOS(trigger));
+    trigger.addEventListener('click', () => openOS(trigger, trigger.dataset.osTarget || 'welcome'));
   });
 
   overlay.inert = true;

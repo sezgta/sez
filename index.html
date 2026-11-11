@@ -4,11 +4,37 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#05070b">
-  <meta name="description" content="SEZ 液态桌面：一次关于液态玻璃与触感界面的独立研究。点击唤醒，进入一块可以亲手操作的玻璃手机桌面。">
-  <title>SEZ — 让网站，学会流动</title>
+  <meta name="description" content="SEZ Studio 液态玻璃工作室：为 AI、SaaS 与硬件品牌打造可操作的发布页与互动产品体验。手机桌面、电脑桌面与互动发布项目。">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="SEZ Studio — 液态玻璃与互动产品发布">
+  <meta property="og:description" content="把下一次发布，做成可以触摸的界面。SEZ Studio 为 AI、SaaS 与硬件品牌设计可操作的发布体验。">
+  <meta property="og:url" content="https://sezgta.github.io/sez/">
+  <meta property="og:image" content="https://sezgta.github.io/sez/assets/og-sez.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://sezgta.github.io/sez/assets/og-sez.jpg">
+  <link rel="canonical" href="https://sezgta.github.io/sez/">
+  <title>SEZ Studio — 液态玻璃与互动产品发布</title>
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="styles.css?v=20261112a">
-  <link rel="stylesheet" href="pc.css?v=20261112a">
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "ProfessionalService",
+      "name": "SEZ Studio",
+      "url": "https://sezgta.github.io/sez/",
+      "description": "为 AI、SaaS 与硬件品牌设计可操作的发布页、液态玻璃界面与互动产品体验。",
+      "priceRange": "¥30,000–¥200,000",
+      "areaServed": "Worldwide",
+      "serviceType": [
+        "Interactive launch experiences",
+        "Web design and development",
+        "Liquid glass UI"
+      ]
+    }
+  </script>
+  <link rel="stylesheet" href="styles.css?v=20261112d">
+  <link rel="stylesheet" href="pc.css?v=20261112d">
   <script>document.documentElement.classList.add('js');</script>
 </head>
 <body id="top">
@@ -82,17 +108,21 @@
       <div class="brand">
         <span class="brand-mark" aria-hidden="true"><i></i><i></i></span>
         <span class="brand-name">SEZ</span>
-        <span class="brand-sub">/ LIQUID DESKTOP</span>
+        <span class="brand-sub">/ LIQUID STUDIO</span>
       </div>
 
       <p class="header-note">
-        <span>SEZ LIQUID OS</span>
+        <span>SEZ STUDIO</span>
         <i aria-hidden="true"></i>
-        <span>AN INTERFACE STUDY</span>
+        <span>INTERACTIVE LAUNCHES</span>
         <em>2026</em>
       </p>
 
       <div class="header-actions">
+        <button class="studio-header" type="button" data-open-os data-os-target="studio" aria-label="打开 SEZ Studio 服务与合作">
+          <span>Studio</span>
+          <i aria-hidden="true"></i>
+        </button>
         <button class="wake-button" type="button" data-wake data-open-desktop>
           <span class="wake-button-icon" aria-hidden="true"><svg width="14" height="14"><use href="#i-spark"></use></svg></span>
           <span>唤醒 SEZ</span>
@@ -564,6 +594,10 @@
                 <span class="os-entry-icon" aria-hidden="true"><svg width="16" height="16"><use href="#si-monitor"></use></svg></span>
                 <span class="os-entry-copy"><strong>电脑桌面</strong><small>DESKTOP</small></span>
                 <span class="os-entry-arrow" aria-hidden="true">↗</span>
+              </button>
+              <button class="studio-entry" type="button" data-open-os data-os-target="studio" aria-label="打开 SEZ Studio 服务、报价与合作">
+                <span class="studio-entry-mark" aria-hidden="true">S</span>
+                <span class="studio-entry-copy"><strong>SEZ Studio</strong><small>接一个项目 ↗</small></span>
               </button>
               <span class="closing-note">无需跳转 · 一切发生在此页</span>
             </div>
@@ -1146,6 +1180,10 @@
             <span class="szos-icon-art szos-icon-art--settings" aria-hidden="true"><svg width="21" height="21"><use href="#si-gear"></use></svg></span>
             <span class="szos-icon-name">设置</span><small>SETTINGS</small>
           </button>
+          <button class="szos-icon" type="button" data-szos-open="studio">
+            <span class="szos-icon-art szos-icon-art--studio" aria-hidden="true"><svg width="21" height="21"><use href="#si-command"></use></svg></span>
+            <span class="szos-icon-name">Studio</span><small>WORK WITH SEZ</small>
+          </button>
         </div>
         <p class="szos-rail-note">光不是背景，<br>它是桌面本身。</p>
       </div>
@@ -1388,6 +1426,139 @@
             <p class="szos-focus-note">专注，是给光一条只向前的路径。</p>
           </div>
         </section>
+
+        <section class="szos-window szos-window--studio" data-szos-window="studio" role="dialog" aria-label="SEZ Studio 服务、案例与合作">
+          <header class="szos-winbar">
+            <div class="szos-traffic">
+              <button class="szos-tl szos-tl--close" type="button" data-szos-close aria-label="关闭 SEZ Studio 窗口"></button>
+              <button class="szos-tl szos-tl--min" type="button" data-szos-min aria-label="最小化 SEZ Studio 窗口"></button>
+              <button class="szos-tl szos-tl--max" type="button" data-szos-max aria-label="最大化 SEZ Studio 窗口"></button>
+            </div>
+            <span class="szos-wintitle">SEZ / STUDIO</span>
+            <span class="szos-winmeta">OPEN FOR SELECT PROJECTS</span>
+          </header>
+          <div class="szos-wbody szos-studio-body">
+            <section class="szos-studio-hero" data-studio-section="top">
+              <div class="szos-studio-topline">
+                <span class="szos-kicker">SEZ STUDIO / 2026—2027</span>
+                <span class="szos-studio-available"><i></i> ACCEPTING 2 PROJECTS</span>
+              </div>
+              <h2>把下一次发布，<br><em>做成可以触摸的界面。</em></h2>
+              <p>SEZ 为 AI、SaaS 与硬件品牌设计可操作的发布体验。不是再加一层动效，而是让用户在 30 秒内真正摸到产品。</p>
+              <div class="szos-studio-actions">
+                <button class="szos-btn szos-btn--primary" type="button" data-studio-scroll="contact">开始一个项目 <span>↗</span></button>
+                <button class="szos-btn" type="button" data-studio-scroll="offers">查看服务与报价</button>
+              </div>
+              <p class="szos-studio-note">Liquid Sprint / Liquid Launch / Experience Retainer</p>
+            </section>
+
+            <section class="szos-studio-section" data-studio-section="offers">
+              <div class="szos-studio-section-head">
+                <span class="szos-kicker">OFFERS / 03</span>
+                <h3>按发布目标，选择一种合作方式。</h3>
+                <p>价格为首版范围；最终按页面数量、动效深度、内容与技术复杂度评估。</p>
+              </div>
+              <div class="szos-studio-offers">
+                <button class="szos-studio-offer" type="button" data-studio-pick="sprint">
+                  <span class="szos-kicker">01 / SPRINT</span>
+                  <strong>Liquid Sprint</strong>
+                  <p>2 周，验证一个值得被触摸的核心场景。</p>
+                  <ul><li>1 个互动概念</li><li>可上线原型</li><li>移动端适配</li></ul>
+                  <span class="szos-studio-price">¥30k–50k <i>→</i></span>
+                </button>
+                <button class="szos-studio-offer" type="button" data-studio-pick="launch">
+                  <span class="szos-kicker">02 / LAUNCH</span>
+                  <strong>Liquid Launch</strong>
+                  <p>4–6 周，完整的新品发布体验。</p>
+                  <ul><li>发布页 + 桌面 Demo</li><li>3 个产品功能窗口</li><li>埋点 / 性能 / 手机优化</li></ul>
+                  <span class="szos-studio-price">¥80k–200k <i>→</i></span>
+                </button>
+                <button class="szos-studio-offer" type="button" data-studio-pick="retainer">
+                  <span class="szos-kicker">03 / RETAINER</span>
+                  <strong>Experience Retainer</strong>
+                  <p>持续迭代，让发布之后仍然有生命。</p>
+                  <ul><li>月度新窗口 / 新实验</li><li>A/B 与转化优化</li><li>优先响应</li></ul>
+                  <span class="szos-studio-price">¥15k–40k / mo <i>→</i></span>
+                </button>
+              </div>
+              <p class="szos-studio-disclaimer">不含第三方字体、素材、差旅与投放费用。首版通常为 1 个发布页 + 1 个核心 Demo。</p>
+            </section>
+
+            <section class="szos-studio-section" data-studio-section="work">
+              <div class="szos-studio-section-head">
+                <span class="szos-kicker">SELECTED STUDIES / 03</span>
+                <h3>从一页，到一个可以走进去的世界。</h3>
+              </div>
+              <div class="szos-studio-work">
+                <article class="szos-studio-study szos-studio-study--sez">
+                  <div class="szos-studio-study-art"><span>SEZ</span></div>
+                  <span class="szos-kicker">SELF-INITIATED / 2026</span>
+                  <h4>SEZ / Liquid Desktop</h4>
+                  <p>手机与电脑双桌面，单页运行，零外部依赖。你现在就在里面。</p>
+                </article>
+                <article class="szos-studio-study szos-studio-study--aurora">
+                  <div class="szos-studio-study-art"><span>AURORA</span></div>
+                  <span class="szos-kicker">CONCEPT / AI NOTEBOOK</span>
+                  <h4>Aurora / AI Notebook</h4>
+                  <p>为 AI 笔记产品设计的发布桌面：笔记、搜索与灵感窗口互相流动。</p>
+                </article>
+                <article class="szos-studio-study szos-studio-study--morrow">
+                  <div class="szos-studio-study-art"><span>MORROW</span></div>
+                  <span class="szos-kicker">CONCEPT / SPATIAL HARDWARE</span>
+                  <h4>Morrow / Spatial Hardware</h4>
+                  <p>把硬件的传感器、光与声音，变成可以亲手打开的发布界面。</p>
+                </article>
+              </div>
+              <p class="szos-studio-disclaimer">Aurora 与 Morrow 为概念研究，不作为已交付客户案例。</p>
+            </section>
+
+            <section class="szos-studio-section szos-studio-process" data-studio-section="process">
+              <div class="szos-studio-section-head">
+                <span class="szos-kicker">PROCESS / 04</span>
+                <h3>从目的开始，不从特效开始。</h3>
+              </div>
+              <div class="szos-studio-process-grid">
+                <div><span>01</span><strong>诊断</strong><p>发布目标、受众与产品记忆点。</p></div>
+                <div><span>02</span><strong>编排</strong><p>叙事、界面与互动节奏。</p></div>
+                <div><span>03</span><strong>构建</strong><p>可操作的页面、桌面与窗口。</p></div>
+                <div><span>04</span><strong>发布</strong><p>性能、埋点与上线后的实验。</p></div>
+              </div>
+            </section>
+
+            <section class="szos-studio-section szos-studio-contact" data-studio-section="contact">
+              <div class="szos-studio-contact-head">
+                <span class="szos-kicker">START A PROJECT</span>
+                <h3>先说说你在做什么。</h3>
+                <p>我在找 2 个值得被认真发布的产品。留下一个清晰的简报，我会在 2 个工作日内回复。</p>
+              </div>
+              <form class="szos-studio-form" id="szosStudioForm" novalidate>
+                <div class="szos-studio-form-row">
+                  <label>怎么称呼你<input name="name" type="text" autocomplete="name" placeholder="你的名字" required></label>
+                  <label>工作邮箱<input name="email" type="email" autocomplete="email" placeholder="name@company.com" required></label>
+                  <label>公司 / 产品<input name="company" type="text" autocomplete="organization" placeholder="产品名或网址"></label>
+                  <label>项目类型<select name="type"><option>Liquid Sprint</option><option selected>Liquid Launch</option><option>Experience Retainer</option><option>还不确定</option></select></label>
+                  <label>预算范围<select name="budget"><option>¥30k–50k</option><option selected>¥80k–120k</option><option>¥120k–200k</option><option>¥200k+</option><option>月度合作</option></select></label>
+                  <label>目标发布时间<input name="timeline" type="text" placeholder="例如 2027 Q1"></label>
+                  <label class="szos-studio-form-full">介绍一下你的产品<textarea name="message" rows="4" placeholder="产品是什么、这次发布想让人记住什么、你已经有什么素材…" required></textarea></label>
+                  <label class="szos-studio-consent szos-studio-form-full"><input name="consent" type="checkbox" required><span>我同意 SEZ Studio 仅就本次项目与我联系。</span></label>
+                </div>
+                <div class="szos-studio-form-actions">
+                  <button class="szos-btn szos-btn--primary" type="submit" id="szosStudioSubmit">准备项目简报 <span>↗</span></button>
+                  <button class="szos-btn" type="button" id="szosStudioCopy">复制简报</button>
+                  <span class="szos-studio-form-status" id="szosStudioStatus" role="status" aria-live="polite"></span>
+                </div>
+              </form>
+              <div class="szos-studio-brief" id="szosStudioBrief" hidden>
+                <div class="szos-studio-brief-head">
+                  <span class="szos-kicker">YOUR PROJECT BRIEF</span>
+                  <span>已生成 · 可直接复制发送</span>
+                </div>
+                <textarea id="szosStudioBriefText" readonly aria-label="已生成的项目简报"></textarea>
+              </div>
+              <p class="szos-studio-privacy">仅用于项目沟通，不会被公开。当前版本会先在本机生成简报，配置合作邮箱后可一键通过邮件发送。<span id="szosStudioContactLine"></span></p>
+            </section>
+          </div>
+        </section>
       </div>
 
       <div class="szos-dock-wrap">
@@ -1399,6 +1570,7 @@
           <button type="button" data-szos-open="music" aria-label="打开音乐"><span class="szos-dock-art"><svg width="20" height="20" aria-hidden="true"><use href="#si-music"></use></svg></span><i></i></button>
           <button type="button" data-szos-open="focus" aria-label="打开专注"><span class="szos-dock-art"><svg width="20" height="20" aria-hidden="true"><use href="#si-focus"></use></svg></span><i></i></button>
           <button type="button" data-szos-open="settings" aria-label="打开设置"><span class="szos-dock-art"><svg width="20" height="20" aria-hidden="true"><use href="#si-gear"></use></svg></span><i></i></button>
+          <button type="button" data-szos-open="studio" aria-label="打开 SEZ Studio 服务与合作"><span class="szos-dock-art"><svg width="20" height="20" aria-hidden="true"><use href="#si-command"></use></svg></span><i></i></button>
           <span class="szos-dock-sep" aria-hidden="true"></span>
           <button type="button" data-szos-spotlight aria-label="搜索"><span class="szos-dock-art"><svg width="19" height="19" aria-hidden="true"><use href="#si-search"></use></svg></span><i></i></button>
           <button type="button" data-szos-control aria-label="控制中心"><span class="szos-dock-art"><svg width="19" height="19" aria-hidden="true"><use href="#si-sliders"></use></svg></span><i></i></button>
@@ -1459,8 +1631,9 @@
   </section>
 
   <p class="sr-only" id="wakeStatus" role="status" aria-live="polite"></p>
-  <script src="app.js?v=20261112a"></script>
-  <script src="desktop.js?v=20261112a"></script>
-  <script src="pc.js?v=20261112a"></script>
+  <script src="app.js?v=20261112d"></script>
+  <script src="desktop.js?v=20261112d"></script>
+  <script src="studio-config.js?v=20261112d"></script>
+  <script src="pc.js?v=20261112d"></script>
 </body>
 </html>
