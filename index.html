@@ -7,8 +7,8 @@
   <meta name="description" content="SEZ 液态桌面：一次关于液态玻璃与触感界面的独立研究。点击唤醒，进入一块可以亲手操作的玻璃手机桌面。">
   <title>SEZ — 让网站，学会流动</title>
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="styles.css?v=20261111b">
-  <link rel="stylesheet" href="pc.css?v=20261111b">
+  <link rel="stylesheet" href="styles.css?v=20261112a">
+  <link rel="stylesheet" href="pc.css?v=20261112a">
   <script>document.documentElement.classList.add('js');</script>
 </head>
 <body id="top">
@@ -63,6 +63,11 @@
       <feTurbulence type="fractalNoise" baseFrequency="0.018 0.027" numOctaves="2" seed="4" result="noise"/>
       <feGaussianBlur in="noise" stdDeviation="2" result="softNoise"/>
       <feDisplacementMap in="SourceGraphic" in2="softNoise" scale="26" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <filter id="szos-glass-warp" x="-10%" y="-10%" width="120%" height="120%" color-interpolation-filters="sRGB">
+      <feTurbulence type="fractalNoise" baseFrequency="0.006 0.009" numOctaves="2" seed="17" result="noise"/>
+      <feGaussianBlur in="noise" stdDeviation="2.6" result="softNoise"/>
+      <feDisplacementMap in="SourceGraphic" in2="softNoise" scale="8" xChannelSelector="R" yChannelSelector="G"/>
     </filter>
   </svg>
 
@@ -1454,8 +1459,8 @@
   </section>
 
   <p class="sr-only" id="wakeStatus" role="status" aria-live="polite"></p>
-  <script src="app.js?v=20261111b"></script>
-  <script src="desktop.js?v=20261111b"></script>
-  <script src="pc.js?v=20261111b"></script>
+  <script src="app.js?v=20261112a"></script>
+  <script src="desktop.js?v=20261112a"></script>
+  <script src="pc.js?v=20261112a"></script>
 </body>
 </html>

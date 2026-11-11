@@ -5,6 +5,7 @@
   const $$ = (selector, root = document) => Array.from(root.querySelectorAll(selector));
   const clamp = (min, max, value) => Math.min(max, Math.max(min, value));
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
 
   const overlay = $('#sezOS');
   if (!overlay) return;
@@ -550,6 +551,17 @@
     const win = event.target.closest('.szos-window');
     if (win) focusWindow(win);
   });
+
+  if (finePointer.matches && !reduceMotion.matches) {
+    windowsRoot.addEventListener('pointermove', (event) => {
+      const win = event.target.closest('.szos-window');
+      if (!win) return;
+      const rect = win.getBoundingClientRect();
+      if (!rect.width || !rect.height) return;
+      win.style.setProperty('--szos-glint-x', `${(((event.clientX - rect.left) / rect.width) * 100).toFixed(1)}%`);
+      win.style.setProperty('--szos-glint-y', `${(((event.clientY - rect.top) / rect.height) * 100).toFixed(1)}%`);
+    }, { passive: true });
+  }
 
   windowsRoot.addEventListener('dblclick', (event) => {
     const win = event.target.closest('.szos-window');

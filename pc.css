@@ -733,7 +733,7 @@ html.szos-lock {
 }
 
 .szos-widget-kicker {
-  color: rgba(255, 255, 255, .32);
+  color: rgba(255, 255, 255, .43);
   font-family: var(--mono);
   font-size: 6.3px;
   letter-spacing: .09em;
@@ -768,19 +768,26 @@ html.szos-lock {
   max-width: calc(100% - 48px);
   max-height: calc(100% - 92px);
   flex-direction: column;
+  isolation: isolate;
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, .17);
+  border: 1px solid rgba(255, 255, 255, .28);
   border-radius: 21px;
-  color: rgba(245, 248, 247, .88);
+  color: rgba(249, 251, 249, .91);
   background:
-    radial-gradient(ellipse at 50% 0%, rgba(var(--szos-accent-rgb), .08), transparent 40%),
-    linear-gradient(145deg, rgba(18, 30, 37, .88), rgba(5, 13, 18, .9));
-  -webkit-backdrop-filter: blur(30px) saturate(155%);
-  backdrop-filter: blur(30px) saturate(155%);
+    radial-gradient(ellipse at 42% 0%, rgba(255, 255, 255, .16), transparent 49%),
+    radial-gradient(ellipse at 86% 108%, rgba(var(--szos-accent-rgb), .1), transparent 53%),
+    linear-gradient(135deg, rgba(255, 255, 255, .14), rgba(255, 255, 255, .035) 38%, rgba(3, 10, 14, .22)),
+    linear-gradient(180deg, transparent 54%, rgba(3, 9, 13, .16)),
+    rgba(4, 12, 17, .34);
+  -webkit-backdrop-filter: blur(28px) saturate(170%) brightness(.94);
+  backdrop-filter: blur(28px) saturate(170%) brightness(.94);
   box-shadow:
-    0 32px 80px rgba(0, 0, 0, .44),
-    0 4px 14px rgba(0, 0, 0, .22),
-    inset 0 1px 0 rgba(255, 255, 255, .15);
+    0 38px 100px rgba(0, 0, 0, .48),
+    0 7px 22px rgba(0, 0, 0, .24),
+    0 0 0 1px rgba(255, 255, 255, .045),
+    inset 0 1px 0 rgba(255, 255, 255, .46),
+    inset 0 0 0 1px rgba(255, 255, 255, .055),
+    inset 0 -22px 55px rgba(255, 255, 255, .025);
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
@@ -798,13 +805,34 @@ html.szos-lock {
   outline: none;
 }
 
+.szos-window > * {
+  position: relative;
+  z-index: 1;
+}
+
+.szos-window::before {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  border-radius: inherit;
+  background:
+    radial-gradient(ellipse 460px 260px at var(--szos-glint-x, 24%) var(--szos-glint-y, -4%), rgba(255, 255, 255, .26), transparent 64%),
+    radial-gradient(ellipse 300px 190px at 88% 105%, rgba(var(--szos-accent-rgb), .12), transparent 68%),
+    linear-gradient(112deg, rgba(255, 255, 255, .16), transparent 29%, transparent 66%, rgba(255, 255, 255, .05));
+  content: "";
+  mix-blend-mode: screen;
+  opacity: .82;
+  pointer-events: none;
+}
+
 .szos-window::after {
   position: absolute;
+  z-index: 2;
   top: 0;
-  right: 14%;
-  left: 14%;
+  right: 11%;
+  left: 11%;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .24), transparent);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .55), transparent);
   content: "";
   pointer-events: none;
 }
@@ -823,12 +851,27 @@ html.szos-lock {
 }
 
 .szos-window.is-active {
-  border-color: rgba(255, 255, 255, .28);
+  border-color: rgba(255, 255, 255, .42);
   box-shadow:
-    0 42px 110px rgba(0, 0, 0, .55),
-    0 5px 18px rgba(0, 0, 0, .25),
-    0 0 0 1px rgba(189, 255, 234, .045),
-    inset 0 1px 0 rgba(255, 255, 255, .2);
+    0 46px 120px rgba(0, 0, 0, .56),
+    0 6px 20px rgba(0, 0, 0, .26),
+    0 0 0 1px rgba(var(--szos-accent-rgb), .09),
+    0 0 70px rgba(var(--szos-accent-rgb), .09),
+    inset 0 1px 0 rgba(255, 255, 255, .58),
+    inset 0 0 0 1px rgba(255, 255, 255, .07);
+}
+
+.szos-window.is-active::before {
+  opacity: 1;
+}
+
+/* The active window gets a real, subtle backdrop refraction. Inactive
+   windows keep the cheaper blur so a busy desktop stays responsive. */
+@supports ((backdrop-filter: url("#szos-glass-warp")) or (-webkit-backdrop-filter: url("#szos-glass-warp"))) {
+  .szos-window.is-active {
+    -webkit-backdrop-filter: url("#szos-glass-warp") blur(20px) saturate(180%) brightness(.92);
+    backdrop-filter: url("#szos-glass-warp") blur(20px) saturate(180%) brightness(.92);
+  }
 }
 
 .szos-window.is-dragging,
@@ -893,8 +936,9 @@ html.szos-lock {
   gap: 12px;
   height: 42px;
   padding: 0 14px;
-  border-bottom: 1px solid rgba(255, 255, 255, .075);
-  background: rgba(255, 255, 255, .025);
+  border-bottom: 1px solid rgba(255, 255, 255, .12);
+  background: linear-gradient(180deg, rgba(255, 255, 255, .095), rgba(255, 255, 255, .015));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .14);
   cursor: grab;
   touch-action: none;
   user-select: none;
@@ -945,7 +989,7 @@ html.szos-lock {
 
 .szos-wintitle {
   overflow: hidden;
-  color: rgba(255, 255, 255, .54);
+  color: rgba(255, 255, 255, .66);
   font-family: var(--mono);
   font-size: 7px;
   letter-spacing: .07em;
@@ -955,7 +999,7 @@ html.szos-lock {
 
 .szos-winmeta {
   margin-left: auto;
-  color: rgba(255, 255, 255, .26);
+  color: rgba(255, 255, 255, .36);
   font-family: var(--mono);
   font-size: 6px;
   letter-spacing: .045em;
@@ -982,7 +1026,7 @@ html.szos-lock {
 }
 
 .szos-kicker {
-  color: rgba(255, 255, 255, .34);
+  color: rgba(255, 255, 255, .46);
   font-family: var(--mono);
   font-size: 6.5px;
   letter-spacing: .09em;
@@ -1084,9 +1128,10 @@ html.szos-lock {
 .szos-welcome-copy > p {
   max-width: 355px;
   margin: 0;
-  color: rgba(255, 255, 255, .4);
+  color: rgba(255, 255, 255, .58);
   font-size: 10px;
   line-height: 1.8;
+  text-shadow: 0 1px 12px rgba(0, 0, 0, .22);
 }
 
 .szos-welcome-actions {
@@ -1149,7 +1194,7 @@ html.szos-lock {
 .szos-welcome-foot {
   grid-column: 1 / -1;
   margin: 0;
-  color: rgba(255, 255, 255, .23);
+  color: rgba(255, 255, 255, .38);
   font-family: var(--mono);
   font-size: 6.5px;
   letter-spacing: .03em;
@@ -1197,7 +1242,7 @@ html.szos-lock {
 
 .szos-weather-hero p {
   margin: 0;
-  color: rgba(255, 255, 255, .5);
+  color: rgba(255, 255, 255, .64);
   font-size: 9px;
 }
 
@@ -1282,7 +1327,7 @@ html.szos-lock {
   gap: 12px;
   min-height: 31px;
   border-bottom: 1px solid rgba(255, 255, 255, .06);
-  color: rgba(255, 255, 255, .54);
+  color: rgba(255, 255, 255, .65);
   font-size: 8.5px;
 }
 
@@ -1304,7 +1349,7 @@ html.szos-lock {
 
 .szos-forecast b {
   margin-left: auto;
-  color: rgba(255, 255, 255, .4);
+  color: rgba(255, 255, 255, .53);
   font-family: var(--mono);
   font-size: 6.5px;
   font-weight: 400;
@@ -1342,7 +1387,7 @@ html.szos-lock {
 
 .szos-note-side p {
   margin: 14px 0 0;
-  color: rgba(255, 255, 255, .27);
+  color: rgba(255, 255, 255, .42);
   font-size: 8px;
   line-height: 1.8;
 }
@@ -1406,7 +1451,7 @@ html.szos-lock {
 
 .szos-note-foot {
   margin: 9px 0 0;
-  color: rgba(255, 255, 255, .22);
+  color: rgba(255, 255, 255, .36);
   font-family: var(--mono);
   font-size: 6px;
   letter-spacing: .03em;
@@ -1432,7 +1477,7 @@ html.szos-lock {
 
 .szos-photos-head p {
   margin: 0;
-  color: rgba(255, 255, 255, .31);
+  color: rgba(255, 255, 255, .46);
   font-size: 8px;
 }
 
@@ -1603,7 +1648,7 @@ html.szos-lock {
 
 .szos-track-meta p {
   margin: 0;
-  color: rgba(255, 255, 255, .33);
+  color: rgba(255, 255, 255, .46);
   font-family: var(--mono);
   font-size: 6.5px;
   letter-spacing: .04em;
@@ -1762,7 +1807,7 @@ html.szos-lock {
 
 .szos-settings-head p {
   margin: 0;
-  color: rgba(255, 255, 255, .29);
+  color: rgba(255, 255, 255, .45);
   font-size: 8.5px;
 }
 
@@ -1772,7 +1817,7 @@ html.szos-lock {
 
 .szos-settings-group h4 {
   margin: 0 0 8px;
-  color: rgba(255, 255, 255, .47);
+  color: rgba(255, 255, 255, .62);
   font-size: 8.5px;
   font-weight: 500;
 }
@@ -1879,7 +1924,7 @@ html.szos-lock {
 }
 
 .szos-setting-toggle small {
-  color: rgba(255, 255, 255, .25);
+  color: rgba(255, 255, 255, .4);
   font-size: 7.5px;
 }
 
@@ -1916,7 +1961,7 @@ html.szos-lock {
 
 .szos-settings-note {
   margin: 15px 0 0;
-  color: rgba(255, 255, 255, .18);
+  color: rgba(255, 255, 255, .32);
   font-family: var(--mono);
   font-size: 5.8px;
   letter-spacing: .035em;
@@ -2018,7 +2063,7 @@ html.szos-lock {
 
 .szos-focus-note {
   margin: 15px 0 0;
-  color: rgba(255, 255, 255, .24);
+  color: rgba(255, 255, 255, .4);
   font-size: 8px;
 }
 
@@ -2187,11 +2232,17 @@ html.szos-lock {
 .szos-spot-panel {
   width: min(560px, calc(100vw - 38px));
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, .2);
+  border: 1px solid rgba(255, 255, 255, .3);
   border-radius: 17px;
   background:
-    linear-gradient(145deg, rgba(26, 39, 47, .93), rgba(5, 13, 17, .94));
-  box-shadow: 0 35px 90px rgba(0, 0, 0, .55), inset 0 1px 0 rgba(255, 255, 255, .17);
+    radial-gradient(ellipse at 24% 0%, rgba(255, 255, 255, .16), transparent 48%),
+    linear-gradient(145deg, rgba(26, 39, 47, .68), rgba(5, 13, 17, .7));
+  -webkit-backdrop-filter: blur(30px) saturate(165%);
+  backdrop-filter: blur(30px) saturate(165%);
+  box-shadow:
+    0 35px 90px rgba(0, 0, 0, .5),
+    inset 0 1px 0 rgba(255, 255, 255, .38),
+    inset 0 0 0 1px rgba(255, 255, 255, .04);
   transform: translateY(-10px) scale(.985);
   transition: transform .3s var(--ease-out);
 }
@@ -2324,14 +2375,18 @@ html.szos-lock {
   right: 14px;
   width: 326px;
   padding: 18px;
-  border: 1px solid rgba(255, 255, 255, .18);
+  border: 1px solid rgba(255, 255, 255, .3);
   border-radius: 19px;
   background:
+    radial-gradient(ellipse at 24% 0%, rgba(255, 255, 255, .17), transparent 44%),
     radial-gradient(ellipse at 50% 0%, rgba(var(--szos-accent-rgb), .08), transparent 38%),
-    linear-gradient(145deg, rgba(25, 39, 46, .94), rgba(5, 13, 17, .95));
-  -webkit-backdrop-filter: blur(28px) saturate(160%);
-  backdrop-filter: blur(28px) saturate(160%);
-  box-shadow: 0 28px 75px rgba(0, 0, 0, .5), inset 0 1px 0 rgba(255, 255, 255, .17);
+    linear-gradient(145deg, rgba(25, 39, 46, .7), rgba(5, 13, 17, .72));
+  -webkit-backdrop-filter: blur(32px) saturate(170%);
+  backdrop-filter: blur(32px) saturate(170%);
+  box-shadow:
+    0 28px 75px rgba(0, 0, 0, .48),
+    inset 0 1px 0 rgba(255, 255, 255, .4),
+    inset 0 0 0 1px rgba(255, 255, 255, .045);
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
@@ -2826,6 +2881,7 @@ html.szos-lock {
   }
 
   .szos-window,
+  .szos-window.is-active,
   .szos-control {
     -webkit-backdrop-filter: blur(20px) saturate(145%);
     backdrop-filter: blur(20px) saturate(145%);
