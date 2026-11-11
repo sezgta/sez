@@ -13,6 +13,6 @@
  * Leave both empty to run the form in local/copy mode.
  */
 window.SEZ_STUDIO = {
-  email: '',
+  email: '11174966585@qq.com',
   endpoint: '',
 };
