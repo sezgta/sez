@@ -132,9 +132,12 @@
   const wakeButtons = $$('[data-wake]');
   let wakeTimeout = null;
   let statusTimeout = null;
+  let hideTouchLensNow = () => {};
 
   function wakeGlass(button, event) {
     if (!wakeVeil) return;
+
+    hideTouchLensNow();
 
     const rect = button?.getBoundingClientRect();
     const hasPointer = Number.isFinite(event?.clientX) && event.clientY > 0;
@@ -332,11 +335,44 @@
   }
 
   // Touch screens get a short-lived lens at the point of contact.
+  // Touch pointers are implicitly captured; still track the pointer id and
+  // listen on the window so a finger that ends outside the stage cannot leave
+  // a bubble stranded on screen.
   if (heroStage && stageLens && !reduceMotion.matches) {
     let hideTimer = null;
+    let touchPointerId = null;
+    let lensIsPressed = false;
+
+    function clearLensTimer() {
+      window.clearTimeout(hideTimer);
+      hideTimer = null;
+    }
+
+    function dismissTouchLens(immediate = false) {
+      clearLensTimer();
+      touchPointerId = null;
+      if (immediate) {
+        stageLens.classList.remove('is-visible');
+      } else {
+        hideTimer = window.setTimeout(() => {
+          stageLens.classList.remove('is-visible');
+          hideTimer = null;
+        }, 360);
+      }
+    }
+
+    hideTouchLensNow = () => {
+      clearLensTimer();
+      touchPointerId = null;
+      stageLens.classList.remove('is-visible');
+      stageLens.classList.remove('is-pressed');
+      stageLens.style.removeProperty('scale');
+      lensIsPressed = false;
+    };
 
     function placeTouchLens(event) {
       if (event.pointerType === 'mouse') return;
+      if (touchPointerId !== null && event.pointerId !== touchPointerId) return;
 
       const rect = heroStage.getBoundingClientRect();
       const x = clamp(0, rect.width, event.clientX - rect.left);
@@ -347,23 +383,45 @@
       stageLens.classList.add('is-visible');
       heroStage.style.setProperty('--mx', `${((x / rect.width) * 100).toFixed(2)}%`);
       heroStage.style.setProperty('--my', `${((y / rect.height) * 100).toFixed(2)}%`);
-      window.clearTimeout(hideTimer);
+      clearLensTimer();
     }
 
-    heroStage.addEventListener('pointerdown', placeTouchLens, { passive: true });
-    heroStage.addEventListener('pointermove', (event) => {
-      if (event.pointerType !== 'mouse' && event.buttons > 0) placeTouchLens(event);
-    }, { passive: true });
+    function beginTouchLens(event) {
+      if (event.pointerType === 'mouse') return;
+      touchPointerId = event.pointerId;
+      placeTouchLens(event);
+      try {
+        heroStage.setPointerCapture(event.pointerId);
+      } catch (error) {
+        // Older Safari can refuse capture; the window listeners below still
+        // guarantee that the lens is removed on release.
+      }
+    }
 
     function releaseTouchLens(event) {
       if (event.pointerType === 'mouse') return;
-      hideTimer = window.setTimeout(() => {
-        stageLens.classList.remove('is-visible');
-      }, 1000);
+      if (touchPointerId !== null && event.pointerId !== undefined && event.pointerId !== touchPointerId) return;
+      dismissTouchLens(false);
     }
+
+    heroStage.addEventListener('pointerdown', beginTouchLens, { passive: true });
+    heroStage.addEventListener('pointermove', (event) => {
+      if (event.pointerType !== 'mouse' && event.pointerId === touchPointerId && event.buttons > 0) {
+        placeTouchLens(event);
+      }
+    }, { passive: true });
 
     heroStage.addEventListener('pointerup', releaseTouchLens, { passive: true });
     heroStage.addEventListener('pointercancel', releaseTouchLens, { passive: true });
+    heroStage.addEventListener('lostpointercapture', releaseTouchLens, { passive: true });
+    window.addEventListener('pointerup', releaseTouchLens, { passive: true });
+    window.addEventListener('pointercancel', releaseTouchLens, { passive: true });
+    window.addEventListener('scroll', () => {
+      if (touchPointerId !== null || stageLens.classList.contains('is-visible')) dismissTouchLens(true);
+    }, { passive: true });
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'hidden') hideTouchLensNow();
+    });
   }
 
   /* ------------------------------------------------------------------
