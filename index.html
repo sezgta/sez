@@ -7,7 +7,8 @@
   <meta name="description" content="SEZ 液态桌面：一次关于液态玻璃与触感界面的独立研究。点击唤醒，进入一块可以亲手操作的玻璃手机桌面。">
   <title>SEZ — 让网站，学会流动</title>
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css?v=20261111b">
+  <link rel="stylesheet" href="pc.css?v=20261111b">
   <script>document.documentElement.classList.add('js');</script>
 </head>
 <body id="top">
@@ -121,6 +122,11 @@
               <span class="button-icon" aria-hidden="true">
                 <svg width="17" height="17"><use href="#i-spark"></use></svg>
               </span>
+            </button>
+            <button class="os-entry" type="button" data-open-os aria-label="进入 SEZ 电脑桌面">
+              <span class="os-entry-icon" aria-hidden="true"><svg width="17" height="17"><use href="#si-monitor"></use></svg></span>
+              <span class="os-entry-copy"><strong>电脑桌面</strong><small>DESKTOP OS</small></span>
+              <span class="os-entry-arrow" aria-hidden="true">↗</span>
             </button>
             <span class="hero-scroll-cue" aria-hidden="true">
               <span class="cue-rule"><i></i></span>
@@ -549,6 +555,11 @@
                 <span>唤醒 SEZ 桌面</span>
                 <svg width="16" height="16" aria-hidden="true"><use href="#i-spark"></use></svg>
               </button>
+              <button class="os-entry os-entry--closing" type="button" data-open-os aria-label="进入 SEZ 电脑桌面">
+                <span class="os-entry-icon" aria-hidden="true"><svg width="16" height="16"><use href="#si-monitor"></use></svg></span>
+                <span class="os-entry-copy"><strong>电脑桌面</strong><small>DESKTOP</small></span>
+                <span class="os-entry-arrow" aria-hidden="true">↗</span>
+              </button>
               <span class="closing-note">无需跳转 · 一切发生在此页</span>
             </div>
           </div>
@@ -655,6 +666,26 @@
     <symbol id="si-check" viewBox="0 0 24 24">
       <path d="m5 12.4 4.4 4.1L19 6.8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
     </symbol>
+    <symbol id="si-monitor" viewBox="0 0 24 24">
+      <rect x="2.8" y="3.6" width="18.4" height="13" rx="2.4" fill="none" stroke="currentColor" stroke-width="1.5"/>
+      <path d="M9.2 20.4h5.6M12 16.8v3.6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="si-power" viewBox="0 0 24 24">
+      <path d="M12 3v8.2M6.3 6.5a8.2 8.2 0 1 0 11.4 0" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="si-wifi" viewBox="0 0 24 24">
+      <path d="M3.5 8.3a13.2 13.2 0 0 1 17 0M6.6 11.7a8.6 8.6 0 0 1 10.8 0M9.7 15.1a4 4 0 0 1 4.6 0M12 18.7h.01" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="si-window" viewBox="0 0 24 24">
+      <rect x="3.3" y="4.5" width="17.4" height="15" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/>
+      <path d="M3.3 9h17.4M7 6.8h.01M9.6 6.8h.01" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="si-plus" viewBox="0 0 24 24">
+      <path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="si-command" viewBox="0 0 24 24">
+      <path d="M9 9h6v6H9zM9 9H7.5A2.5 2.5 0 1 1 10 6.5V9Zm0 6H7.5A2.5 2.5 0 1 0 10 17.5V15Zm6-6h1.5A2.5 2.5 0 1 0 14 6.5V9Zm0 6h1.5a2.5 2.5 0 1 1-2.5 2.5V15Z" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/>
+    </symbol>
   </svg>
 
   <section class="sez-desktop" id="sezDesktop" role="dialog" aria-modal="true" aria-labelledby="sezTitle" aria-hidden="true" inert>
@@ -681,6 +712,11 @@
     </header>
 
     <div class="sez-stage">
+      <div class="sez-rotate-note" role="status">
+        <span class="sez-rotate-kicker">ROTATE / SEZ</span>
+        <strong>把手机转回竖屏。</strong>
+        <p>液态桌面在竖屏下更完整，横屏时请先旋转设备。</p>
+      </div>
       <aside class="sez-intro">
         <p class="sez-eyebrow"><span class="live-dot"></span> WAKE COMPLETE</p>
         <h2 id="sezTitle">一块可以<br><em>触碰</em>的桌面。</h2>
@@ -1027,8 +1063,399 @@
     </footer>
   </section>
 
+  <section class="szos" id="sezOS" role="dialog" aria-modal="true" aria-labelledby="szosTitle" aria-hidden="true" inert>
+    <div class="szos-wall" aria-hidden="true">
+      <img class="szos-wall-img is-active" data-szos-wall="aurora" src="assets/scene-aurora.svg" alt="">
+      <img class="szos-wall-img" data-szos-wall="dusk" src="assets/scene-dusk.svg" alt="">
+      <img class="szos-wall-img" data-szos-wall="tide" src="assets/scene-tide.svg" alt="">
+      <div class="szos-wall-veil"></div>
+      <div class="szos-wall-glow szos-wall-glow--one"></div>
+      <div class="szos-wall-glow szos-wall-glow--two"></div>
+      <div class="szos-grain"></div>
+      <span class="szos-wall-mark">SEZ</span>
+    </div>
+
+    <header class="szos-bar">
+      <div class="szos-bar-side">
+        <button class="szos-brand" type="button" data-szos-open="welcome" aria-label="打开 SEZ 欢迎窗口">
+          <span class="szos-brand-mark" aria-hidden="true"><i></i><i></i></span>
+          <span class="szos-brand-name">SEZ</span>
+          <span class="szos-brand-sub">DESKTOP</span>
+        </button>
+        <nav class="szos-menu" aria-label="桌面菜单">
+          <button type="button" data-szos-desktop>桌面</button>
+          <button type="button" data-szos-next-wall>光效</button>
+          <button type="button" data-szos-open="welcome">关于</button>
+        </nav>
+      </div>
+
+      <button class="szos-bar-clock" type="button" data-szos-open="welcome" aria-label="打开 SEZ 欢迎窗口">
+        <span data-szos-clock>02:45</span>
+        <small data-szos-date>11月11日 · 星期三</small>
+      </button>
+
+      <div class="szos-bar-side szos-bar-side--right">
+        <button class="szos-bar-icon" type="button" data-szos-spotlight aria-label="搜索桌面应用">
+          <svg width="15" height="15" aria-hidden="true"><use href="#si-search"></use></svg>
+        </button>
+        <button class="szos-bar-icon" type="button" data-szos-control aria-label="打开控制中心">
+          <svg width="15" height="15" aria-hidden="true"><use href="#si-sliders"></use></svg>
+        </button>
+        <button class="szos-sleep" type="button" data-szos-sleep aria-label="休眠电脑桌面">
+          <svg width="14" height="14" aria-hidden="true"><use href="#si-power"></use></svg>
+          <span>休眠</span>
+          <kbd>ESC</kbd>
+        </button>
+      </div>
+    </header>
+
+    <div class="szos-workspace" id="szosWorkspace">
+      <div class="szos-left-rail">
+        <p class="szos-rail-label"><span class="live-dot"></span> SEZ / DESKTOP 01</p>
+        <div class="szos-icons" aria-label="桌面应用">
+          <button class="szos-icon" type="button" data-szos-open="welcome">
+            <span class="szos-icon-art szos-icon-art--sez" aria-hidden="true"><svg width="23" height="23"><use href="#i-spark"></use></svg></span>
+            <span class="szos-icon-name">SEZ</span><small>WELCOME</small>
+          </button>
+          <button class="szos-icon" type="button" data-szos-open="weather">
+            <span class="szos-icon-art szos-icon-art--weather" aria-hidden="true"><svg width="22" height="22"><use href="#si-cloud-sun"></use></svg></span>
+            <span class="szos-icon-name">天气</span><small>WEATHER</small>
+          </button>
+          <button class="szos-icon" type="button" data-szos-open="notes">
+            <span class="szos-icon-art szos-icon-art--notes" aria-hidden="true"><svg width="21" height="21"><use href="#si-note"></use></svg></span>
+            <span class="szos-icon-name">笔记</span><small>NOTES</small>
+          </button>
+          <button class="szos-icon" type="button" data-szos-open="photos">
+            <span class="szos-icon-art szos-icon-art--photos" aria-hidden="true"><svg width="21" height="21"><use href="#si-photo"></use></svg></span>
+            <span class="szos-icon-name">照片</span><small>PHOTOS</small>
+          </button>
+          <button class="szos-icon" type="button" data-szos-open="music">
+            <span class="szos-icon-art szos-icon-art--music" aria-hidden="true"><svg width="21" height="21"><use href="#si-music"></use></svg></span>
+            <span class="szos-icon-name">音乐</span><small>MUSIC</small>
+          </button>
+          <button class="szos-icon" type="button" data-szos-open="focus">
+            <span class="szos-icon-art szos-icon-art--focus" aria-hidden="true"><svg width="21" height="21"><use href="#si-focus"></use></svg></span>
+            <span class="szos-icon-name">专注</span><small>FOCUS</small>
+          </button>
+          <button class="szos-icon" type="button" data-szos-open="settings">
+            <span class="szos-icon-art szos-icon-art--settings" aria-hidden="true"><svg width="21" height="21"><use href="#si-gear"></use></svg></span>
+            <span class="szos-icon-name">设置</span><small>SETTINGS</small>
+          </button>
+        </div>
+        <p class="szos-rail-note">光不是背景，<br>它是桌面本身。</p>
+      </div>
+
+      <div class="szos-stagecopy" aria-hidden="true">
+        <span>SEZ / LIQUID WORKSPACE</span>
+        <h2>让桌面，<br><em>学会呼吸。</em></h2>
+        <p>窗口有重量，光有方向。<br>双击标题栏最大化，拖动玻璃。</p>
+      </div>
+
+      <div class="szos-widgets">
+        <section class="szos-clock-widget" aria-label="当前时间">
+          <span class="szos-widget-kicker">LOCAL / SHANGHAI</span>
+          <strong data-szos-clock>02:45</strong>
+          <p data-szos-date>11月11日 · 星期三</p>
+          <span class="szos-clock-rule"></span>
+          <small>MAKE ROOM FOR LIGHT.</small>
+        </section>
+        <button class="szos-weather-widget" type="button" data-szos-open="weather" aria-label="打开天气窗口">
+          <span class="szos-widget-kicker">SEZ WEATHER <i></i> 18°</span>
+          <strong>18°</strong>
+          <p>上海 · 多云 / 光正穿过云层</p>
+          <span class="szos-weather-glyph" aria-hidden="true"></span>
+        </button>
+      </div>
+
+      <div class="szos-windows" id="szosWindows">
+        <section class="szos-window szos-window--welcome" data-szos-window="welcome" role="dialog" aria-label="SEZ 欢迎">
+          <header class="szos-winbar">
+            <div class="szos-traffic">
+              <button class="szos-tl szos-tl--close" type="button" data-szos-close aria-label="关闭欢迎窗口"></button>
+              <button class="szos-tl szos-tl--min" type="button" data-szos-min aria-label="最小化欢迎窗口"></button>
+              <button class="szos-tl szos-tl--max" type="button" data-szos-max aria-label="最大化欢迎窗口"></button>
+            </div>
+            <span class="szos-wintitle">SEZ / WELCOME</span>
+            <span class="szos-winmeta">LIQUID DESKTOP</span>
+          </header>
+          <div class="szos-wbody szos-welcome-body">
+            <div class="szos-welcome-copy">
+              <span class="szos-kicker">SEZ DESKTOP OS / 01</span>
+              <h2 id="szosTitle">一块可以<br><em>打开的</em>桌面。</h2>
+              <p>这里没有页面跳转。只有会发光、会退后、会记住你上一次触碰的窗口。</p>
+              <div class="szos-welcome-actions">
+                <button class="szos-btn szos-btn--primary" type="button" data-szos-open="weather">打开天气 <span>↗</span></button>
+                <button class="szos-btn" type="button" data-szos-open="notes">写一条笔记</button>
+                <button class="szos-btn" type="button" data-szos-open="music">听环境音</button>
+              </div>
+            </div>
+            <div class="szos-welcome-orb" aria-hidden="true"><span>SEZ</span></div>
+            <p class="szos-welcome-foot"><span class="live-dot"></span> 拖动窗口 · 双击标题栏最大化 · ESC 逐层关闭</p>
+          </div>
+        </section>
+
+        <section class="szos-window szos-window--weather" data-szos-window="weather" role="dialog" aria-label="天气">
+          <header class="szos-winbar">
+            <div class="szos-traffic">
+              <button class="szos-tl szos-tl--close" type="button" data-szos-close aria-label="关闭天气窗口"></button>
+              <button class="szos-tl szos-tl--min" type="button" data-szos-min aria-label="最小化天气窗口"></button>
+              <button class="szos-tl szos-tl--max" type="button" data-szos-max aria-label="最大化天气窗口"></button>
+            </div>
+            <span class="szos-wintitle">SEZ / WEATHER</span>
+            <span class="szos-winmeta">SHANGHAI · 18°</span>
+          </header>
+          <div class="szos-wbody szos-weather-body">
+            <div class="szos-weather-hero">
+              <div>
+                <span class="szos-widget-kicker">SHANGHAI / 上海 <i></i> 03:02</span>
+                <strong>18°</strong>
+                <p>光正穿过云层，今天的风适合慢一点。</p>
+              </div>
+              <span class="szos-weather-globe" aria-hidden="true"><i></i></span>
+            </div>
+            <div class="szos-weather-hours">
+              <span><small>06:00</small><b>18°</b><i style="--h:42%"></i></span>
+              <span><small>09:00</small><b>17°</b><i style="--h:64%"></i></span>
+              <span><small>12:00</small><b>16°</b><i style="--h:52%"></i></span>
+              <span><small>15:00</small><b>20°</b><i style="--h:82%"></i></span>
+              <span><small>18:00</small><b>21°</b><i style="--h:94%"></i></span>
+              <span><small>21:00</small><b>18°</b><i style="--h:58%"></i></span>
+            </div>
+            <div class="szos-forecast">
+              <div><span>周四</span><i></i><b>19° / 12°</b></div>
+              <div><span>周五</span><i></i><b>21° / 13°</b></div>
+              <div><span>周六</span><i></i><b>20° / 14°</b></div>
+              <div><span>周日</span><i></i><b>18° / 11°</b></div>
+            </div>
+            <p class="szos-widget-kicker szos-window-footnote">SEZ WEATHER / LOCAL CONDITIONS · UPDATED 03:02</p>
+          </div>
+        </section>
+
+        <section class="szos-window szos-window--notes" data-szos-window="notes" role="dialog" aria-label="笔记">
+          <header class="szos-winbar">
+            <div class="szos-traffic">
+              <button class="szos-tl szos-tl--close" type="button" data-szos-close aria-label="关闭笔记窗口"></button>
+              <button class="szos-tl szos-tl--min" type="button" data-szos-min aria-label="最小化笔记窗口"></button>
+              <button class="szos-tl szos-tl--max" type="button" data-szos-max aria-label="最大化笔记窗口"></button>
+            </div>
+            <span class="szos-wintitle">SEZ / NOTES</span>
+            <span class="szos-winmeta"><span id="szosNoteState">SAVED</span> · LOCAL</span>
+          </header>
+          <div class="szos-wbody szos-note-body">
+            <aside class="szos-note-side">
+              <span class="szos-kicker">UNTITLED / 01</span>
+              <strong>让光<br>慢一点。</strong>
+              <p>写下此刻。它会留在这台电脑里，不离开这个页面。</p>
+              <span class="szos-note-date" data-szos-date>11月11日</span>
+            </aside>
+            <div class="szos-note-main">
+              <div class="szos-note-tools">
+                <span class="szos-kicker">WRITING SURFACE</span>
+                <button type="button" id="szosNoteClear">清空</button>
+              </div>
+              <textarea id="szosNoteInput" aria-label="SEZ 笔记内容" spellcheck="false"></textarea>
+              <p class="szos-note-foot"><span class="live-dot"></span> 自动保存在本机浏览器</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="szos-window szos-window--photos" data-szos-window="photos" role="dialog" aria-label="照片">
+          <header class="szos-winbar">
+            <div class="szos-traffic">
+              <button class="szos-tl szos-tl--close" type="button" data-szos-close aria-label="关闭照片窗口"></button>
+              <button class="szos-tl szos-tl--min" type="button" data-szos-min aria-label="最小化照片窗口"></button>
+              <button class="szos-tl szos-tl--max" type="button" data-szos-max aria-label="最大化照片窗口"></button>
+            </div>
+            <span class="szos-wintitle">SEZ / PHOTOS</span>
+            <span class="szos-winmeta">LIGHT STUDIES / 06</span>
+          </header>
+          <div class="szos-wbody szos-photos-body">
+            <div class="szos-photos-head">
+              <span class="szos-kicker">SELECTED STUDIES / 06</span>
+              <p>光不是被看见的，它是被经过的。</p>
+            </div>
+            <div class="szos-photo-grid">
+              <button class="szos-photo" type="button" data-szos-photo data-caption="微光 / 01" style="--p-a:#5b8cff;--p-b:#1d394c;--p-c:#6ce5cf"><span class="szos-photo-art"></span><span class="szos-photo-index">01</span><span class="szos-photo-name">微光</span></button>
+              <button class="szos-photo" type="button" data-szos-photo data-caption="暮日 / 02" style="--p-a:#ff976e;--p-b:#471f55;--p-c:#ffc89d"><span class="szos-photo-art"></span><span class="szos-photo-index">02</span><span class="szos-photo-name">暮日</span></button>
+              <button class="szos-photo" type="button" data-szos-photo data-caption="潮汐 / 03" style="--p-a:#21c7af;--p-b:#0c3a43;--p-c:#b2ffe3"><span class="szos-photo-art"></span><span class="szos-photo-index">03</span><span class="szos-photo-name">潮汐</span></button>
+              <button class="szos-photo" type="button" data-szos-photo data-caption="流光 / 04" style="--p-a:#d657d3;--p-b:#401950;--p-c:#ffc2ed"><span class="szos-photo-art"></span><span class="szos-photo-index">04</span><span class="szos-photo-name">流光</span></button>
+              <button class="szos-photo" type="button" data-szos-photo data-caption="余温 / 05" style="--p-a:#ff5a96;--p-b:#53142e;--p-c:#ffd0a3"><span class="szos-photo-art"></span><span class="szos-photo-index">05</span><span class="szos-photo-name">余温</span></button>
+              <button class="szos-photo" type="button" data-szos-photo data-caption="深蓝 / 06" style="--p-a:#3e6dff;--p-b:#081b36;--p-c:#73e3ff"><span class="szos-photo-art"></span><span class="szos-photo-index">06</span><span class="szos-photo-name">深蓝</span></button>
+            </div>
+          </div>
+        </section>
+
+        <section class="szos-window szos-window--music" data-szos-window="music" role="dialog" aria-label="音乐">
+          <header class="szos-winbar">
+            <div class="szos-traffic">
+              <button class="szos-tl szos-tl--close" type="button" data-szos-close aria-label="关闭音乐窗口"></button>
+              <button class="szos-tl szos-tl--min" type="button" data-szos-min aria-label="最小化音乐窗口"></button>
+              <button class="szos-tl szos-tl--max" type="button" data-szos-max aria-label="最大化音乐窗口"></button>
+            </div>
+            <span class="szos-wintitle">SEZ / MUSIC</span>
+            <span class="szos-winmeta">GENERATIVE AUDIO</span>
+          </header>
+          <div class="szos-wbody szos-music-body">
+            <div class="szos-album" id="szosAlbum">
+              <span class="szos-album-ring szos-album-ring--one"></span>
+              <span class="szos-album-ring szos-album-ring--two"></span>
+              <span class="szos-album-core">SEZ</span>
+              <span class="szos-album-tag">AMBIENT / 01</span>
+            </div>
+            <div class="szos-track-meta">
+              <span class="szos-kicker">GENERATIVE STUDY / 01</span>
+              <h3 id="szosTrackTitle">Liquid Hours</h3>
+              <p id="szosTrackArtist">SEZ · Ambient 01</p>
+            </div>
+            <div class="szos-visualizer" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+            <div class="szos-music-controls">
+              <button type="button" data-szos-music-prev aria-label="上一首"><svg width="19" height="19" aria-hidden="true"><use href="#si-prev"></use></svg></button>
+              <button class="szos-play" type="button" id="szosMusicPlay" aria-label="播放音乐"><svg width="22" height="22" aria-hidden="true"><use href="#si-play" id="szosPlayIcon"></use></svg></button>
+              <button type="button" data-szos-music-next aria-label="下一首"><svg width="19" height="19" aria-hidden="true"><use href="#si-next"></use></svg></button>
+            </div>
+            <div class="szos-music-volume">
+              <svg width="15" height="15" aria-hidden="true"><use href="#si-volume"></use></svg>
+              <input id="szosMusicVolume" type="range" min="0" max="100" step="1" value="62" aria-label="音乐音量">
+              <span id="szosMusicState">PAUSED</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="szos-window szos-window--settings" data-szos-window="settings" role="dialog" aria-label="设置">
+          <header class="szos-winbar">
+            <div class="szos-traffic">
+              <button class="szos-tl szos-tl--close" type="button" data-szos-close aria-label="关闭设置窗口"></button>
+              <button class="szos-tl szos-tl--min" type="button" data-szos-min aria-label="最小化设置窗口"></button>
+              <button class="szos-tl szos-tl--max" type="button" data-szos-max aria-label="最大化设置窗口"></button>
+            </div>
+            <span class="szos-wintitle">SEZ / SETTINGS</span>
+            <span class="szos-winmeta">THIS DESKTOP</span>
+          </header>
+          <div class="szos-wbody szos-settings-body">
+            <div class="szos-settings-head"><span class="szos-kicker">DESKTOP APPEARANCE</span><h3>给桌面换一层光。</h3><p>所有改变只发生在 SEZ 电脑桌面里。</p></div>
+            <div class="szos-settings-group">
+              <h4>壁纸</h4>
+              <div class="szos-wall-row">
+                <button type="button" data-szos-wall="aurora" aria-pressed="true"><img src="assets/scene-aurora.svg" alt=""><span>极光</span></button>
+                <button type="button" data-szos-wall="dusk" aria-pressed="false"><img src="assets/scene-dusk.svg" alt=""><span>暮日</span></button>
+                <button type="button" data-szos-wall="tide" aria-pressed="false"><img src="assets/scene-tide.svg" alt=""><span>潮汐</span></button>
+              </div>
+            </div>
+            <div class="szos-settings-group">
+              <h4>光色</h4>
+              <div class="szos-accent-row">
+                <button type="button" data-szos-accent="mint" aria-pressed="true"><i></i>薄荷</button>
+                <button type="button" data-szos-accent="peach" aria-pressed="false"><i></i>蜜桃</button>
+                <button type="button" data-szos-accent="blue" aria-pressed="false"><i></i>冰蓝</button>
+              </div>
+            </div>
+            <button class="szos-setting-toggle" type="button" data-szos-calm aria-pressed="false">
+              <span><strong>柔和流动</strong><small>暂停装饰性光晕动画</small></span><i></i>
+            </button>
+            <p class="szos-settings-note">SEZ / SETTINGS · CHANGES LIVE ON THIS DEVICE ONLY</p>
+          </div>
+        </section>
+
+        <section class="szos-window szos-window--focus" data-szos-window="focus" role="dialog" aria-label="专注">
+          <header class="szos-winbar">
+            <div class="szos-traffic">
+              <button class="szos-tl szos-tl--close" type="button" data-szos-close aria-label="关闭专注窗口"></button>
+              <button class="szos-tl szos-tl--min" type="button" data-szos-min aria-label="最小化专注窗口"></button>
+              <button class="szos-tl szos-tl--max" type="button" data-szos-max aria-label="最大化专注窗口"></button>
+            </div>
+            <span class="szos-wintitle">SEZ / FOCUS</span>
+            <span class="szos-winmeta">ONE DIRECTION</span>
+          </header>
+          <div class="szos-wbody szos-focus-body">
+            <span class="szos-kicker">DEEP WORK / TIMER</span>
+            <div class="szos-focus-ring" id="szosFocusRing" style="--focus-progress:0">
+              <div><strong id="szosFocusTime">25:00</strong><small>DEEP FOCUS</small></div>
+            </div>
+            <div class="szos-focus-modes" aria-label="专注时长">
+              <button class="is-active" type="button" data-szos-focus-mode="25" aria-pressed="true">25</button>
+              <button type="button" data-szos-focus-mode="45" aria-pressed="false">45</button>
+              <button type="button" data-szos-focus-mode="5" aria-pressed="false">5</button>
+            </div>
+            <div class="szos-focus-actions">
+              <button class="szos-btn szos-btn--primary" type="button" id="szosFocusToggle">开始专注</button>
+              <button class="szos-icon-btn" type="button" id="szosFocusReset" aria-label="重置专注计时"><svg width="17" height="17" aria-hidden="true"><use href="#i-reset"></use></svg></button>
+            </div>
+            <p class="szos-focus-note">专注，是给光一条只向前的路径。</p>
+          </div>
+        </section>
+      </div>
+
+      <div class="szos-dock-wrap">
+        <nav class="szos-dock" aria-label="程序坞">
+          <button type="button" data-szos-open="welcome" aria-label="打开 SEZ 欢迎窗口"><span class="szos-dock-art"><svg width="20" height="20" aria-hidden="true"><use href="#i-spark"></use></svg></span><i></i></button>
+          <button type="button" data-szos-open="weather" aria-label="打开天气"><span class="szos-dock-art"><svg width="20" height="20" aria-hidden="true"><use href="#si-cloud-sun"></use></svg></span><i></i></button>
+          <button type="button" data-szos-open="notes" aria-label="打开笔记"><span class="szos-dock-art"><svg width="20" height="20" aria-hidden="true"><use href="#si-note"></use></svg></span><i></i></button>
+          <button type="button" data-szos-open="photos" aria-label="打开照片"><span class="szos-dock-art"><svg width="20" height="20" aria-hidden="true"><use href="#si-photo"></use></svg></span><i></i></button>
+          <button type="button" data-szos-open="music" aria-label="打开音乐"><span class="szos-dock-art"><svg width="20" height="20" aria-hidden="true"><use href="#si-music"></use></svg></span><i></i></button>
+          <button type="button" data-szos-open="focus" aria-label="打开专注"><span class="szos-dock-art"><svg width="20" height="20" aria-hidden="true"><use href="#si-focus"></use></svg></span><i></i></button>
+          <button type="button" data-szos-open="settings" aria-label="打开设置"><span class="szos-dock-art"><svg width="20" height="20" aria-hidden="true"><use href="#si-gear"></use></svg></span><i></i></button>
+          <span class="szos-dock-sep" aria-hidden="true"></span>
+          <button type="button" data-szos-spotlight aria-label="搜索"><span class="szos-dock-art"><svg width="19" height="19" aria-hidden="true"><use href="#si-search"></use></svg></span><i></i></button>
+          <button type="button" data-szos-control aria-label="控制中心"><span class="szos-dock-art"><svg width="19" height="19" aria-hidden="true"><use href="#si-sliders"></use></svg></span><i></i></button>
+        </nav>
+      </div>
+
+      <div class="szos-statusline" aria-hidden="true">
+        <span><span class="live-dot"></span> SEZ OS / DESKTOP 01</span>
+        <span>NO LINKS / ONLY SURFACES</span>
+        <span><kbd>⌘</kbd><kbd>K</kbd> SEARCH · <kbd>ESC</kbd> CLOSE</span>
+      </div>
+
+      <div class="szos-spotlight" id="szosSpotlight" aria-hidden="true">
+        <div class="szos-spot-panel" role="dialog" aria-label="搜索桌面应用">
+          <div class="szos-spot-field">
+            <svg width="19" height="19" aria-hidden="true"><use href="#si-search"></use></svg>
+            <input id="szosSpotInput" type="search" placeholder="搜索应用、窗口或光…" autocomplete="off" aria-label="搜索桌面应用">
+            <kbd>ESC</kbd>
+          </div>
+          <div class="szos-spot-results" id="szosSpotResults" role="listbox" aria-label="搜索结果"></div>
+          <div class="szos-spot-foot"><span>↑↓ 选择</span><span>ENTER 打开</span><span>SEZ SPOTLIGHT</span></div>
+        </div>
+      </div>
+
+      <aside class="szos-control" id="szosControl" aria-hidden="true" role="dialog" aria-label="控制中心">
+        <header>
+          <div><span class="szos-kicker">SEZ / CONTROL</span><h3>控制中心</h3></div>
+          <button class="szos-icon-btn" type="button" data-szos-control-close aria-label="关闭控制中心"><svg width="16" height="16" aria-hidden="true"><use href="#si-close"></use></svg></button>
+        </header>
+        <div class="szos-control-grid">
+          <button type="button" data-szos-quick="wifi" aria-pressed="true"><svg width="18" height="18" aria-hidden="true"><use href="#si-wifi"></use></svg><span>WI-FI<small>ON</small></span></button>
+          <button type="button" data-szos-open="settings"><svg width="18" height="18" aria-hidden="true"><use href="#si-gear"></use></svg><span>桌面<small>SETTINGS</small></span></button>
+          <button type="button" data-szos-open="focus"><svg width="18" height="18" aria-hidden="true"><use href="#si-focus"></use></svg><span>专注<small>FOCUS</small></span></button>
+          <button type="button" data-szos-open="music"><svg width="18" height="18" aria-hidden="true"><use href="#si-music"></use></svg><span>音乐<small>AMBIENT</small></span></button>
+        </div>
+        <label class="szos-slider"><span>亮度 <output id="szosBrightnessOut">88%</output></span><input id="szosBrightness" type="range" min="20" max="100" step="1" value="88"></label>
+        <label class="szos-slider"><span>音量 <output id="szosVolumeOut">62%</output></span><input id="szosVolume" type="range" min="0" max="100" step="1" value="62"></label>
+        <div class="szos-control-walls">
+          <span>壁纸</span>
+          <div>
+            <button class="is-active" type="button" data-szos-wall="aurora" aria-label="极光壁纸"></button>
+            <button type="button" data-szos-wall="dusk" aria-label="暮日壁纸"></button>
+            <button type="button" data-szos-wall="tide" aria-label="潮汐壁纸"></button>
+          </div>
+        </div>
+        <button class="szos-sleep szos-sleep--wide" type="button" data-szos-sleep><svg width="14" height="14" aria-hidden="true"><use href="#si-power"></use></svg><span>休眠桌面</span></button>
+      </aside>
+
+      <div class="szos-lightbox" id="szosLightbox" role="dialog" aria-modal="true" aria-label="照片预览" aria-hidden="true">
+        <button class="szos-lightbox-close" type="button" id="szosLightboxClose" aria-label="关闭照片预览"><svg width="18" height="18" aria-hidden="true"><use href="#si-close"></use></svg></button>
+        <div class="szos-lightbox-art" id="szosLightboxArt"></div>
+        <p id="szosLightboxCaption">微光 / 01</p>
+      </div>
+
+      <div class="szos-toast" id="szosToast" role="status" aria-live="polite"></div>
+      <div class="szos-brightness" id="szosBrightnessOverlay" aria-hidden="true"></div>
+    </div>
+  </section>
+
   <p class="sr-only" id="wakeStatus" role="status" aria-live="polite"></p>
-  <script src="app.js"></script>
-  <script src="desktop.js"></script>
+  <script src="app.js?v=20261111b"></script>
+  <script src="desktop.js?v=20261111b"></script>
+  <script src="pc.js?v=20261111b"></script>
 </body>
 </html>
