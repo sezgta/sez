@@ -8732,3 +8732,196 @@ body.sez-open .stage-lens {
     font-size: 6px;
   }
 }
+
+/* =========================================================
+   MOBILE STABILITY PASS
+   Touch screens get the same glass language with cheaper
+   compositing, stable viewport units and contained overscroll.
+   ========================================================= */
+
+html,
+body {
+  overscroll-behavior-y: none;
+}
+
+html.sez-lock,
+html.sez-lock body {
+  overflow: hidden !important;
+  overscroll-behavior: none;
+}
+
+html.sez-lock {
+  height: 100%;
+}
+
+.stage-lens {
+  will-change: auto;
+}
+
+.stage-lens.is-visible {
+  will-change: transform, opacity;
+}
+
+@media (max-width: 760px), (hover: none) and (pointer: coarse) {
+  /* SVG displacement filters are beautiful on a desktop GPU and expensive on
+     a phone. Keep the lens, lose the displacement pass. */
+  .stage-lens {
+    -webkit-backdrop-filter: blur(8px) saturate(1.25) brightness(1.02) !important;
+    backdrop-filter: blur(8px) saturate(1.25) brightness(1.02) !important;
+  }
+
+  .studio-card {
+    -webkit-backdrop-filter: blur(14px) saturate(1.35) !important;
+    backdrop-filter: blur(14px) saturate(1.35) !important;
+  }
+
+  .stage-spec {
+    -webkit-backdrop-filter: blur(14px) saturate(1.35) !important;
+    backdrop-filter: blur(14px) saturate(1.35) !important;
+  }
+
+  .sez-desktop,
+  .sez-screen,
+  .sez-home-view {
+    overscroll-behavior: none;
+  }
+
+  .sez-device {
+    height: min(calc(100svh - 74px), 820px);
+    transform: translateY(12px);
+  }
+
+  .sez-view-scroll,
+  .sez-notes-wrap,
+  .sez-search-app {
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Avoid a full-screen blur while an app is opening. A dim + slight scale
+     reads as depth and costs dramatically less on mobile GPUs. */
+  .sez-home-view.is-app-open {
+    opacity: .48;
+    filter: brightness(.7) saturate(.9);
+    transform: scale(.97) translateY(.6%);
+  }
+
+  .sez-ambient-flow,
+  .sez-phone-flow,
+  .sez-glare {
+    display: none;
+  }
+
+  .sez-weather-widget,
+  .sez-dock {
+    -webkit-backdrop-filter: blur(10px) saturate(145%) !important;
+    backdrop-filter: blur(10px) saturate(145%) !important;
+  }
+
+  .sez-sheet,
+  .sez-photo-viewer,
+  .sez-search-field {
+    -webkit-backdrop-filter: blur(16px) saturate(145%) !important;
+    backdrop-filter: blur(16px) saturate(145%) !important;
+  }
+
+  .sez-icon-art,
+  .sez-back,
+  .sez-sleep {
+    -webkit-backdrop-filter: blur(9px) saturate(140%) !important;
+    backdrop-filter: blur(9px) saturate(140%) !important;
+  }
+
+  .sez-desktop {
+    touch-action: manipulation;
+  }
+
+  .stage-frame {
+    touch-action: pan-y;
+  }
+
+  .stage-lens,
+  .stage-click-ripple {
+    pointer-events: none;
+  }
+
+  .title-orb,
+  .seal-orbit,
+  .liquid-flow i {
+    animation: none;
+  }
+
+  .liquid-flow i {
+    filter: blur(26px);
+    opacity: .45;
+  }
+}
+
+.sez-rotate-note {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 9px;
+  width: min(420px, 82vw);
+  margin: auto;
+  padding: 34px 28px;
+  border: 1px solid rgba(255, 255, 255, .13);
+  border-radius: 28px;
+  color: rgba(255, 255, 255, .86);
+  background: rgba(7, 16, 22, .54);
+  -webkit-backdrop-filter: blur(20px) saturate(145%);
+  backdrop-filter: blur(20px) saturate(145%);
+  text-align: center;
+}
+
+.sez-rotate-kicker {
+  color: rgba(189, 255, 234, .66);
+  font-family: var(--mono);
+  font-size: 8px;
+  letter-spacing: .12em;
+}
+
+.sez-rotate-note strong {
+  font-size: 22px;
+  font-weight: 500;
+  letter-spacing: -.03em;
+}
+
+.sez-rotate-note p {
+  max-width: 280px;
+  margin: 0;
+  color: rgba(255, 255, 255, .46);
+  font-size: 11px;
+  line-height: 1.8;
+}
+
+@media (max-height: 560px) and (orientation: landscape) and (pointer: coarse) {
+  .sez-rotate-note {
+    display: flex;
+  }
+
+  .sez-device {
+    display: none;
+  }
+}
+
+@media (max-width: 360px) {
+  .sez-device {
+    height: min(calc(100svh - 66px), 760px);
+  }
+}
+
+@media (max-height: 560px) and (orientation: landscape) and (pointer: coarse) {
+  .sez-intro {
+    display: none;
+  }
+
+  .sez-rotate-note {
+    display: flex;
+  }
+
+  .sez-device {
+    display: none;
+  }
+}
