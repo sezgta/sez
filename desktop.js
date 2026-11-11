@@ -6,6 +6,7 @@
   const clamp = (min, max, value) => Math.min(max, Math.max(min, value));
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
+  const compactViewport = window.matchMedia('(max-width: 760px)');
 
   const desktop = $('#sezDesktop');
   if (!desktop) return;
@@ -45,6 +46,10 @@
   let toastTimer = null;
   let noteSaveTimer = null;
   let photoReturnFocus = null;
+  let historyEntryPushed = false;
+  let ignoreHistoryPop = false;
+
+  const compactMotion = () => reduceMotion.matches || compactViewport.matches || !finePointer.matches;
 
   const state = {
     wallpaper: 'aurora',
@@ -201,9 +206,19 @@
     resetToHome();
     setPageInert(true);
     document.body.classList.add('sez-open');
+    document.documentElement.classList.add('sez-lock');
     desktop.inert = false;
     desktop.setAttribute('aria-hidden', 'false');
     desktop.classList.add('is-visible');
+
+    if (!historyEntryPushed) {
+      try {
+        window.history.pushState({ ...(window.history.state || {}), sezDesktop: true }, '', window.location.href);
+        historyEntryPushed = true;
+      } catch (error) {
+        historyEntryPushed = false;
+      }
+    }
 
     window.clearTimeout(openFocusTimer);
     window.requestAnimationFrame(() => {
@@ -217,7 +232,7 @@
     }, reduceMotion.matches ? 30 : 300);
   }
 
-  function closeDesktop() {
+  function closeDesktop(fromHistory = false) {
     if (!isOpen || isClosing) return;
 
     isClosing = true;
@@ -240,9 +255,22 @@
       desktop.inert = true;
       desktop.setAttribute('aria-hidden', 'true');
       document.body.classList.remove('sez-open');
+      document.documentElement.classList.remove('sez-lock');
       setPageInert(false);
       isOpen = false;
       isClosing = false;
+
+      if (historyEntryPushed && !fromHistory) {
+        historyEntryPushed = false;
+        ignoreHistoryPop = true;
+        try {
+          window.history.back();
+        } catch (error) {
+          ignoreHistoryPop = false;
+        }
+      } else if (fromHistory) {
+        historyEntryPushed = false;
+      }
 
       if (lastTrigger instanceof HTMLElement && lastTrigger.isConnected) {
         lastTrigger.focus({ preventScroll: true });
@@ -257,9 +285,12 @@
     activeName = '';
     activeTrigger = null;
     appViews.forEach((view) => {
+      view.getAnimations().forEach((animation) => animation.cancel());
       view.classList.remove('is-open');
       view.style.zIndex = '';
       view.style.transformOrigin = '';
+      view.style.transform = '';
+      view.style.opacity = '';
       view.inert = true;
       view.setAttribute('aria-hidden', 'true');
     });
@@ -312,7 +343,7 @@
       previous.style.zIndex = '1';
       const fade = previous.animate(
         [{ opacity: 1 }, { opacity: 0 }],
-        { duration: reduceMotion.matches ? 1 : 220, easing: 'ease-out', fill: 'forwards' }
+        { duration: reduceMotion.matches ? 1 : compactMotion() ? 140 : 220, easing: 'ease-out', fill: 'forwards' }
       );
       fade.finished.then(() => {
         if (activeView !== previous) {
@@ -359,12 +390,22 @@
     view.style.transformOrigin = `${originX}px ${originY}px`;
 
     if (!reduceMotion.matches && view.animate) {
+      view.getAnimations().forEach((animation) => animation.cancel());
+      const compact = compactMotion();
       view.animate(
-        [
-          { opacity: 0, transform: 'scale(.1)' },
-          { opacity: 1, transform: 'scale(1)' },
-        ],
-        { duration: 540, easing: 'cubic-bezier(.16, 1, .3, 1)' }
+        compact
+          ? [
+              { opacity: 0, transform: 'translateY(14px) scale(.985)' },
+              { opacity: 1, transform: 'translateY(0) scale(1)' },
+            ]
+          : [
+              { opacity: 0, transform: 'scale(.1)' },
+              { opacity: 1, transform: 'scale(1)' },
+            ],
+        {
+          duration: compact ? 300 : 540,
+          easing: compact ? 'cubic-bezier(.22, .8, .25, 1)' : 'cubic-bezier(.16, 1, .3, 1)',
+        }
       );
     }
 
@@ -422,6 +463,7 @@
         activeName = '';
         activeTrigger = null;
       }
+      view.getAnimations().forEach((animation) => animation.cancel());
       isAppClosing = false;
 
       if (isOpen) {
@@ -436,12 +478,22 @@
       return;
     }
 
+    const compact = compactMotion();
     const animation = view.animate(
-      [
-        { opacity: 1, transform: 'scale(1)' },
-        { opacity: 0, transform: 'scale(.1)' },
-      ],
-      { duration: 360, easing: 'cubic-bezier(.4, 0, .2, 1)', fill: 'forwards' }
+      compact
+        ? [
+            { opacity: 1, transform: 'translateY(0) scale(1)' },
+            { opacity: 0, transform: 'translateY(10px) scale(.99)' },
+          ]
+        : [
+            { opacity: 1, transform: 'scale(1)' },
+            { opacity: 0, transform: 'scale(.1)' },
+          ],
+      {
+        duration: compact ? 230 : 360,
+        easing: compact ? 'cubic-bezier(.3, 0, .4, 1)' : 'cubic-bezier(.4, 0, .2, 1)',
+        fill: 'forwards',
+      }
     );
 
     animation.finished.then(finish).catch(finish);
@@ -1081,15 +1133,32 @@
     }
   }
 
-  homeIndicator?.addEventListener('pointerup', endHomeSwipe, { passive: true });
-  homeIndicator?.addEventListener('pointercancel', (event) => {
+  function cancelHomeSwipe() {
     if (homeSwipe && activeView) {
       activeView.style.transform = '';
       activeView.style.opacity = '';
     }
     homeSwipe = null;
-    if (event.pointerId !== undefined) suppressHomeClick = false;
+  }
+
+  homeIndicator?.addEventListener('pointerup', endHomeSwipe, { passive: true });
+  homeIndicator?.addEventListener('pointercancel', cancelHomeSwipe, { passive: true });
+  homeIndicator?.addEventListener('lostpointercapture', cancelHomeSwipe, { passive: true });
+  window.addEventListener('pointerup', (event) => {
+    if (homeSwipe) endHomeSwipe(event);
   }, { passive: true });
+  window.addEventListener('pointercancel', cancelHomeSwipe, { passive: true });
+
+  // A phone browser will otherwise treat a downward drag on the home screen as
+  // pull-to-refresh and a back swipe as navigation. Keep the inner surfaces
+  // inside the overlay and stop document-level overscroll.
+  desktop.addEventListener('touchmove', (event) => {
+    if (!isOpen || event.touches.length > 1) return;
+    const target = event.target;
+    if (!(target instanceof Element)) return;
+    if (target.closest('.sez-view-scroll, .sez-notes-wrap, .sez-search-app, textarea, input, select')) return;
+    event.preventDefault();
+  }, { passive: false });
 
   /* ------------------------------------------------------------------
      Glare follows the pointer
@@ -1109,6 +1178,16 @@
   /* ------------------------------------------------------------------
      Keyboard
   ------------------------------------------------------------------ */
+
+  window.addEventListener('popstate', () => {
+    if (ignoreHistoryPop) {
+      ignoreHistoryPop = false;
+      return;
+    }
+    if (!isOpen) return;
+    historyEntryPushed = false;
+    closeDesktop(true);
+  });
 
   document.addEventListener('keydown', (event) => {
     if (!isOpen) return;
